@@ -22,12 +22,12 @@ if compgen -G "$FLEET_GITOPS_DIR"/teams/*.yml > /dev/null; then
 fi
 
 args=(-f "$FLEET_GLOBAL_FILE")
-for team_file in "$FLEET_GITOPS_DIR"/teams/*.yml; do
-  args+=(-f "$team_file")
-done
-if [ "$FLEET_DELETE_OTHER_TEAMS" = true ]; then
-  args+=(--delete-other-teams)
-fi
+#for team_file in "$FLEET_GITOPS_DIR"/teams/*.yml; do
+#  args+=(-f "$team_file")
+#done
+#if [ "$FLEET_DELETE_OTHER_TEAMS" = true ]; then
+#  args+=(--delete-other-teams)
+#fi
 
 # Dry run
 $FLEETCTL gitops "${args[@]}" --dry-run
