@@ -45,3 +45,9 @@ How to set up your GitOps workflow:
 ## Configuration options
 
 For all configuration options, go to [GitOps reference](https://fleetdm.com/docs/using-fleet/gitops) in the Fleet documentation.
+
+
+RUN:
+export FLEET_URL=https://fleet.shared.huru.co
+export FLEET_GLOBAL_ENROLL_SECRET= [TOKEN]
+./gitops.sh

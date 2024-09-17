@@ -3,10 +3,8 @@
 # For Fleet Premium, the default.yml file updates policies and queries that run on all hosts ("All teams"). Controls and agent options are updated for hosts on "No team."
 policies:
   - path: ./lib/macos/policies/macos-cis.policies.yml
-  - path: ./lib/macos/policies/macos-device-health.policies.yml
 
   - path: ./lib/windows/policies/windows-cis.policies.yml
-  - path: ./lib/windows/policies/windows-device-health.policies.yml
 
   - path: ./lib/linux/policies/linux-device-health.policies.yml
 
