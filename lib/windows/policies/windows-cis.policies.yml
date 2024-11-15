@@ -95,7 +95,7 @@
     Ask your system administrator to establish the recommended configuration via GP, set the following UI path to 'Enabled':
     'Computer Configuration\Policies\Windows Settings\Security Settings\Account Policies\Password Policy\Relax minimum password length limits'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\SAM\\RelaxMinimumPasswordLengthLimits' AND data != 0);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\SAM\\relaxminimumpasswordlengthlimits' AND data != 0);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: marcosd4h
@@ -980,7 +980,7 @@
     Ask your system administrator to establish the recommended configuration via GP, set the following UI path to 'Enabled':
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\SCENoApplyLegacyAuditPolicy' AND data == 1);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\scenoapplylegacyauditpolicy' AND data == 1);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: marcosd4h
@@ -1017,7 +1017,7 @@
     Ask your system administrator to establish the recommended configuration via GP, set the following UI path to 'Enabled':
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Devices: Prevent users from installing printer drivers'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Print\\Providers\\LanManPrint Services\\Servers\\AddPrinterDrivers' AND data == 1);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Print\\Providers\\LanMan Print Services\\Servers\\AddPrinterDrivers' AND data == 1);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: marcosd4h
@@ -1187,7 +1187,7 @@
     Ask your system administrator to establish the recommended configuration via GP, set the following UI path to 'Disabled':
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Interactive logon: Do not require CTRL+ALT+DEL'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableCAD' AND data == 0);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\disablecad' AND data == 0);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: marcosd4h
@@ -1221,7 +1221,7 @@
     Ask your system administrator to establish the recommended configuration via GP, set the following UI path to '10 or fewer invalid logon attempts, but not 0':
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Interactive logon: Machine account lockout threshold'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\MaxDevicePasswordFailedAttempts' AND data <= 10 AND data != 0);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\maxdevicepasswordfailedattempts' AND data <= 10 AND data != 0);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: marcosd4h
@@ -1237,7 +1237,7 @@
     Ask your system administrator to establish the recommended configuration via GP, set the following UI path to '900 or fewer seconds, but not 0':
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Interactive logon: Machine inactivity limit'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\InactivityTimeoutSecs' AND data <= 900 AND data != 0);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\inactivitytimeoutsecs' AND data <= 900 AND data != 0);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: marcosd4h
@@ -1639,7 +1639,7 @@
     Administrators: Remote Access: Allow:
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Network access: Restrict clients allowed to make remote calls to SAM'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\RestrictRemoteSAM' and (data == '' or data == 'O:BAG:BAD:'));
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa\restrictremotesam' and (data == '' or data == 'O:BAG:BAD:'));
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: rachelelysia
@@ -1657,7 +1657,7 @@
     (i.e. None):
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Network access: Shares that can be accessed anonymously'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanManServer\\Parameters\NullSessionShares' and data == '');
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanManServer\\Parameters\nullsessionshares' and data == '');
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: rachelelysia
@@ -1831,7 +1831,7 @@
     Ask your system administrator to establish the recommended configuration via GP, set the following UI path to 'User is prompted when the key is first used or higher':
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\System cryptography: Force strong key protection for user keys stored on the computer'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Cryptography\\ForceKeyProtection' AND CAST(data AS INTEGER) >= 1);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Cryptography\\forcekeyprotection' AND CAST(data AS INTEGER) >= 1);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: marcosd4h
@@ -2919,7 +2919,7 @@
     To establish the recommended configuration via GP, set the following UI path to Enable auditing for all accounts:
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Network security: Restrict NTLM: Audit Incoming NTLM Traffic'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0\AuditReceivingNTLMTraffic' AND data = 2);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0\auditreceivingntlmtraffic' AND data = 2);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: DefensiveDepth
@@ -2936,7 +2936,7 @@
     To establish the recommended configuration via GP, set the following UI path to Audit all or higher:
     'Computer Configuration\Policies\Windows Settings\Security Settings\Local Policies\Security Options\Restrict NTLM: Outgoing NTLM traffic to remote servers'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0\RestrictSendingNTLMTraffic' AND data in (1,2));
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0\restrictsendingntlmtraffic' AND data in (1,2));
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: DefensiveDepth
@@ -3104,17 +3104,17 @@
   contributors: DefensiveDepth
 
 - name: >
-    WINDOWS - CIS - Ensure 'Windows Firewall: Domain: Logging: Name' is set to '%SystemRoot%\System32\logfiles\firewall\domainfw.log'
+    WINDOWS - CIS - Ensure 'Windows Firewall: Domain: Logging: Name' is set to '%SystemRoot%\System32\LogFiles\firewall\domainfw.log'
   platforms: win11
   platform: windows
   description: |
     Use this option to specify the path and name of the file in which Windows Firewall will write its log information.
-    The recommended state for this setting is: %SystemRoot%\System32\logfiles\firewall\domainfw.log.
+    The recommended state for this setting is: %SystemRoot%\System32\LogFiles\firewall\domainfw.log.
   resolution: |
-    To establish the recommended configuration via GP, set the following UI path to %SystemRoot%\System32\logfiles\firewall\domainfw.log:
+    To establish the recommended configuration via GP, set the following UI path to %SystemRoot%\System32\LogFiles\firewall\domainfw.log:
     'Computer Configuration\Policies\Windows Settings\Security Settings\Windows Defender Firewall with Advanced Security\Windows Defender Firewall with Advanced Security - Local Group Policy Object\Windows Defender Firewall Properties\Domain Profile\Logging Customize\Name'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging\LogFilePath' and data = '%SystemRoot%\System32\logfiles\firewall\domainfw.log');
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging\LogFilePath' and data = '%SystemRoot%\System32\LogFiles\firewall\domainfw.log');
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: DefensiveDepth
@@ -4380,7 +4380,7 @@
     'Computer Configuration\Policies\Administrative Templates\MSS (Legacy)\MSS:(DisableSavePassword) Prevent the dial-up password from being saved'
     Note: This Group Policy path does not exist by default. An additional Group Policy template (MSS-legacy.admx/adml) is required - it is available from the Security Compliance Toolkit 1.0 (https://www.microsoft.com/en-us/download/details.aspx?id=55319)
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\DisableSavePassword' AND data = 2);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\DisableSavePassword' AND data = 1);
   purpose: Informational
   tags: compliance, CIS, CIS_Level2, CIS_group_policy_template_required
   contributors: rachelelysia
@@ -4764,7 +4764,7 @@
     To establish the recommended configuration via GP, set the following UI path to 'Enabled: Disable NetBIOS name resolution on public networks':
     'Computer Configuration\Policies\Administrative Templates\Network\DNS Client\Configure NetBIOS settings'
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\\EnableNetbios' AND (data = 0));
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\DNSClient\\EnableNetbios' AND (data = 2));
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: DefensiveDepth
@@ -6174,7 +6174,7 @@
     'Computer Configuration\Policies\Administrative Templates\Windows Components\BitLocker Drive Encryption\Fixed Data Drives\Choose how BitLocker- protected fixed drives can be recovered: Save BitLocker recovery information to AD DS for fixed data drives'
     Note: This Group Policy path may not exist by default. It is provided by the Group Policy template VolumeEncryption.admx/adml that is included with the Microsoft Windows 7 & Server 2008 R2 Administrative Templates (or newer).
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\FVE\FDVActiveDirectoryBackup' AND data = 0);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\FVE\FDVActiveDirectoryBackup' AND data = 1);
   purpose: Informational
   tags: compliance, CIS, CIS_BitLocker
   contributors: rachelelysia
@@ -7059,7 +7059,7 @@
     'Computer Configuration\Policies\Administrative Templates\Windows Components\Delivery Optimization\Download Mode'
     Note: This Group Policy path may not exist by default. It is provided by the Group Policy template DeliveryOptimization.admx/adml that is included with the Microsoft Windows 10 RTM (Release 1507) Administrative Templates (or newer).
   query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization\DODownloadMode' AND data = 3);
+    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization\DODownloadMode' AND data != 3);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: rachelelysia
@@ -7257,7 +7257,7 @@
     To establish the recommended configuration via GP, set the following UI path to Disabled:
     'Computer Configuration\Policies\Administrative Templates\Windows Components\File Explorer\Turn off account-based insights, recent, favorite, and recommended files in File Explorer'
   query: |
-     SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer\\DisableGraphRecentItems' AND data = 1);
+     SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer\\DisableGraphRecentItems' AND data = 0);
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: DefensiveDepth
