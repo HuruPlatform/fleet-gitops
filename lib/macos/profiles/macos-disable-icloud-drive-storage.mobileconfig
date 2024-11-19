@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>PayloadContent</key>
+		<array>
+			<dict>
+				<key>allowCloudDocumentSync</key>
+				<false />
+				<key>PayloadDisplayName</key>
+				<string>Restrictions #1</string>
+				<key>PayloadIdentifier</key>
+				<string>com.apple.applicationaccess.297d8f72-7ce0-4180-b501-e2b72020485e</string>
+				<key>PayloadType</key>
+				<string>com.apple.applicationaccess</string>
+				<key>PayloadUUID</key>
+				<string>297d8f72-7ce0-4180-b501-e2b72020485e</string>
+				<key>PayloadVersion</key>
+				<integer>1</integer>
+			</dict>
+		</array>
+		<key>PayloadDisplayName</key>
+		<string> iCloud Drive storage solution is disabled</string>
+		<key>PayloadIdentifier</key>
+		<string>LT-HURU00001.630cb1f6-516c-4431-8a79-04ed806bec59</string>
+		<key>PayloadOrganization</key>
+		<string>FleetDM</string>
+		<key>PayloadType</key>
+		<string>Configuration</string>
+		<key>PayloadUUID</key>
+		<string>630cb1f6-516c-4431-8a79-04ed806bec59</string>
+		<key>PayloadVersion</key>
+		<integer>1</integer>
+	</dict>
+</plist>
