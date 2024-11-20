@@ -7,6 +7,10 @@
 			<dict>
 				<key>AutoOpenSafeDownloads</key>
 				<false />
+				<key>DefaultBrowserPromptingState3</key>
+				<integer>2</integer>
+				<key>DidShowWhatsNewInSafari</key>
+				<true />
 				<key>HistoryAgeInDaysLimit</key>
 				<integer>31</integer>
 				<key>PayloadDisplayName</key>

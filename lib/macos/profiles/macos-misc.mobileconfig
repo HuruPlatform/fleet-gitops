@@ -47,6 +47,8 @@
 				<true />
 				<key>enforcedFingerprintTimeout</key>
 				<integer>172800</integer>
+				<key>forceOnDeviceOnlyDictation</key>
+				<true />
 				<key>PayloadDisplayName</key>
 				<string>Restrictions</string>
 				<key>PayloadIdentifier</key>
