@@ -1,3 +1,4 @@
+#!/bin/zsh
 echo "Allowing guests to connect to shared folders enables users to access selected shared folders and their contents from different computers on a network"
 /usr/bin/sudo /usr/sbin/sysadminctl -smbGuestAccess off
 echo "Power Nap on the device:"
