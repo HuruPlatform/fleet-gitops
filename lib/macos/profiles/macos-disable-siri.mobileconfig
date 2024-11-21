@@ -5,15 +5,11 @@
 		<key>PayloadContent</key>
 		<array>
 			<dict>
-				<key>allowApplePersonalizedAdvertising</key>
-				<false />
 				<key>allowAssistant</key>
 				<false />
 				<key>allowFileSharingModification</key>
 				<false />
 				<key>allowSpotlightInternetResults</key>
-				<false />
-				<key>allowUniversalControl</key>
 				<false />
 				<key>PayloadDisplayName</key>
 				<string>Restrictions #1</string>
@@ -25,6 +21,20 @@
 				<string>48fd86de-8196-4887-a9c3-5044913efa3e</string>
 				<key>PayloadVersion</key>
 				<integer>1</integer>
+			</dict>
+			<dict>
+				<key>PayloadDisplayName</key>
+				<string>Assistant</string>
+				<key>PayloadIdentifier</key>
+				<string>com.apple.assistant.support.045e6793-45b7-451b-b593-7fd27e391c9c</string>
+				<key>PayloadType</key>
+				<string>com.apple.assistant.support</string>
+				<key>PayloadUUID</key>
+				<string>045e6793-45b7-451b-b593-7fd27e391c9c</string>
+				<key>PayloadVersion</key>
+				<integer>1</integer>
+				<key>Siri Data Sharing Opt-In Status</key>
+				<integer>2</integer>
 			</dict>
 		</array>
 		<key>PayloadDisplayName</key>

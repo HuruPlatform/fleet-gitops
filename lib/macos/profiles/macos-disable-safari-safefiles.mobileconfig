@@ -7,6 +7,8 @@
 			<dict>
 				<key>AutoOpenSafeDownloads</key>
 				<false />
+				<key>BlockStoragePolicy</key>
+				<integer>2</integer>
 				<key>DefaultBrowserPromptingState3</key>
 				<integer>2</integer>
 				<key>DidShowWhatsNewInSafari</key>

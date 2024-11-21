@@ -9,6 +9,8 @@
 				<true />
 				<key>allowAirDrop</key>
 				<false />
+				<key>allowAirPlayIncomingRequests</key>
+				<false />
 				<key>allowAutoUnlock</key>
 				<false />
 				<key>allowCamera</key>
@@ -57,6 +59,20 @@
 				<string>com.apple.applicationaccess</string>
 				<key>PayloadUUID</key>
 				<string>722287B0-ADCF-418F-8F8F-F2B5DB977355</string>
+				<key>PayloadVersion</key>
+				<integer>1</integer>
+			</dict>
+			<dict>
+				<key>AutoSubmit</key>
+				<false />
+				<key>PayloadDisplayName</key>
+				<string>Submit Diagnostic Information #1</string>
+				<key>PayloadIdentifier</key>
+				<string>com.apple.SubmitDiagInfo.e6872ddb-b460-48f0-a309-3b8440d254d9</string>
+				<key>PayloadType</key>
+				<string>com.apple.SubmitDiagInfo</string>
+				<key>PayloadUUID</key>
+				<string>e6872ddb-b460-48f0-a309-3b8440d254d9</string>
 				<key>PayloadVersion</key>
 				<integer>1</integer>
 			</dict>

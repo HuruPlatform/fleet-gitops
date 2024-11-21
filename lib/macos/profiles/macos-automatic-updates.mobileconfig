@@ -19,6 +19,8 @@
 				<true />
 				<key>CriticalUpdateInstall</key>
 				<true />
+				<key>ManagedDeferredInstallDelay</key>
+				<integer>5</integer>
 				<key>PayloadDescription</key>
 				<string>Configures Software Update settings</string>
 				<key>PayloadDisplayName</key>
