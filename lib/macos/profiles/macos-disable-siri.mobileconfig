@@ -13,6 +13,8 @@
 				<false />
 				<key>allowSpotlightInternetResults</key>
 				<false />
+				<key>allowUniversalControl</key>
+				<false />
 				<key>PayloadDisplayName</key>
 				<string>Restrictions #1</string>
 				<key>PayloadIdentifier</key>
