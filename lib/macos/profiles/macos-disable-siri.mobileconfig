@@ -7,6 +7,8 @@
 			<dict>
 				<key>allowApplePersonalizedAdvertising</key>
 				<false />
+				<key>allowAssistant</key>
+				<false />
 				<key>allowFileSharingModification</key>
 				<false />
 				<key>allowSpotlightInternetResults</key>

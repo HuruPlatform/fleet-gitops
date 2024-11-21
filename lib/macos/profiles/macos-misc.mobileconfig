@@ -8,7 +8,7 @@
 				<key>allowActivityContinuation</key>
 				<true />
 				<key>allowAirDrop</key>
-				<true />
+				<false />
 				<key>allowAutoUnlock</key>
 				<false />
 				<key>allowCamera</key>
