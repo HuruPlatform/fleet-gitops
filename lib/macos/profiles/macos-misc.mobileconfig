@@ -11,6 +11,8 @@
 				<false />
 				<key>allowAirPlayIncomingRequests</key>
 				<false />
+				<key>allowAssistant</key>
+				<true />
 				<key>allowAutoUnlock</key>
 				<false />
 				<key>allowCamera</key>
@@ -47,6 +49,8 @@
 				<true />
 				<key>allowScreenShot</key>
 				<true />
+				<key>allowSiriServerLogging</key>
+				<false />
 				<key>enforcedFingerprintTimeout</key>
 				<integer>172800</integer>
 				<key>forceOnDeviceOnlyDictation</key>
