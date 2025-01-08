@@ -5,6 +5,24 @@
 	<key>PayloadContent</key>
 	<array>
 		<dict>
+			<key>AssetTagInformation</key>
+			<string>HURU Payments Ltd.</string>
+			<key>IfLostReturnToMessage</key>
+			<string>"If you have found this device, I would be grateful if you could kindly contact me at Itsupport@huru.co. Thank you so much for your help!"</string>
+			<key>PayloadDescription</key>
+			<string>Configures ownership information for a shared device</string>
+			<key>PayloadDisplayName</key>
+			<string>Lock Screen Message</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.shareddeviceconfiguration.8B87EB7F-49DF-4235-85A8-299FD784577F</string>
+			<key>PayloadType</key>
+			<string>com.apple.shareddeviceconfiguration</string>
+			<key>PayloadUUID</key>
+			<string>8B87EB7F-49DF-4235-85A8-299FD784577F</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
 			<key>PayloadDisplayName</key>
 			<string>Restrictions</string>
 			<key>PayloadIdentifier</key>
@@ -67,22 +85,6 @@
 			<string>us</string>
 		</dict>
 		<dict>
-			<key>IfLostReturnToMessage</key>
-			<string>"If you have found this device, I would be grateful if you could kindly contact me at Itsupport@huru.co. Thank you so much for your help!"</string>
-			<key>PayloadDescription</key>
-			<string>Configures ownership information for a shared device</string>
-			<key>PayloadDisplayName</key>
-			<string>Lock Screen Message</string>
-			<key>PayloadIdentifier</key>
-			<string>com.apple.shareddeviceconfiguration.9349BD0D-4014-479B-979B-0236EEA1EF22</string>
-			<key>PayloadType</key>
-			<string>com.apple.shareddeviceconfiguration</string>
-			<key>PayloadUUID</key>
-			<string>9349BD0D-4014-479B-979B-0236EEA1EF22</string>
-			<key>PayloadVersion</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
 			<key>AutoSubmit</key>
 			<false/>
 			<key>PayloadDisplayName</key>
@@ -108,7 +110,7 @@
 	<key>PayloadType</key>
 	<string>Configuration</string>
 	<key>PayloadUUID</key>
-	<string>AD4D6580-FF7A-4868-BC90-764909B29B38</string>
+	<string>4F5D49B4-A567-47A8-9A03-1DCD4630D9FC</string>
 	<key>PayloadVersion</key>
 	<integer>1</integer>
 </dict>
