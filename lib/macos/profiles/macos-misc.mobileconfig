@@ -9,6 +9,8 @@
 			<string>HURU Payments Ltd.</string>
 			<key>IfLostReturnToMessage</key>
 			<string>"If you have found this device, I would be grateful if you could kindly contact me at Itsupport@huru.co. Thank you so much for your help!"</string>
+			<key>LockScreenFootnote</key>
+			<string>If you have found this device, I would be grateful if you could kindly contact me at Itsupport@huru.co. Thank you so much for your help!</string>
 			<key>PayloadDescription</key>
 			<string>Configures ownership information for a shared device</string>
 			<key>PayloadDisplayName</key>
