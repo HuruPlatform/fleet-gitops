@@ -5,26 +5,6 @@
 	<key>PayloadContent</key>
 	<array>
 		<dict>
-			<key>AssetTagInformation</key>
-			<string>HURU Payments Ltd.</string>
-			<key>IfLostReturnToMessage</key>
-			<string>"If you have found this device, I would be grateful if you could kindly contact me at Itsupport@huru.co. Thank you so much for your help!"</string>
-			<key>LockScreenFootnote</key>
-			<string>If you have found this device, I would be grateful if you could kindly contact me at Itsupport@huru.co. Thank you so much for your help!</string>
-			<key>PayloadDescription</key>
-			<string>Configures ownership information for a shared device</string>
-			<key>PayloadDisplayName</key>
-			<string>Lock Screen Message</string>
-			<key>PayloadIdentifier</key>
-			<string>com.apple.shareddeviceconfiguration.8B87EB7F-49DF-4235-85A8-299FD784577F</string>
-			<key>PayloadType</key>
-			<string>com.apple.shareddeviceconfiguration</string>
-			<key>PayloadUUID</key>
-			<string>8B87EB7F-49DF-4235-85A8-299FD784577F</string>
-			<key>PayloadVersion</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
 			<key>PayloadDisplayName</key>
 			<string>Restrictions</string>
 			<key>PayloadIdentifier</key>
@@ -100,6 +80,20 @@
 			<key>PayloadVersion</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>NoMulticastAdvertisements</key>
+			<true/>
+			<key>PayloadDisplayName</key>
+			<string>Bonjour</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.mDNSResponder.1670476A-B34C-4F17-A7CB-12327F5C8D9F</string>
+			<key>PayloadType</key>
+			<string>com.apple.mDNSResponder</string>
+			<key>PayloadUUID</key>
+			<string>1670476A-B34C-4F17-A7CB-12327F5C8D9F</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>PayloadDisplayName</key>
 	<string>Various restriction settings</string>
@@ -112,7 +106,7 @@
 	<key>PayloadType</key>
 	<string>Configuration</string>
 	<key>PayloadUUID</key>
-	<string>4F5D49B4-A567-47A8-9A03-1DCD4630D9FC</string>
+	<string>9D9E3FDE-C756-46BE-AB15-4E018EDA63AF</string>
 	<key>PayloadVersion</key>
 	<integer>1</integer>
 </dict>

@@ -1995,15 +1995,15 @@
     SELECT 1 WHERE 
       EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.login.mcx.DisableAutoLoginClient' AND 
-            name='Disable' AND 
+            domain="com.apple.loginwindow" AND 
+            name='com.apple.login.mcx.DisableAutoLoginClient' AND 
             (value = 1 OR value = 'true') AND 
             username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.login.mcx.DisableAutoLoginClient' AND 
-            name='Disable' AND 
+            domain="com.apple.loginwindow" AND 
+            name='com.apple.login.mcx.DisableAutoLoginClient' AND 
             (value != 1 AND value != 'true')
         );  
   purpose: Informational
@@ -2814,8 +2814,7 @@
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='AutoOpenSafeDownloads' AND 
-            (value = 0 OR value = 'false') AND 
-            username = ''
+            (value = 0 OR value = 'false') 
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
@@ -2863,14 +2862,13 @@
               365 - After one year
               36500 - Set Manually
               */
-            value = 1 AND 
-            username = ''
+            value = 31 
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='HistoryAgeInDaysLimit' AND 
-            value != 1
+            value != 31
         );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
