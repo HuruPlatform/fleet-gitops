@@ -1,4 +1,5 @@
-# The latest version of CIS Benchmarks for macOS as of January 2024 for macOS 14.
+---
+# The latest version of CIS Benchmarks for macOS as of November 2024 for macOS 15.
 
 - name: MACOS - CIS - Ensure All Apple-provided Software Is Current (Fleetd Required)
   platforms: macOS
@@ -37,7 +38,7 @@
             domain='com.apple.SoftwareUpdate' AND 
             name='AutomaticCheckEnabled' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -61,7 +62,7 @@
             domain='com.apple.SoftwareUpdate' AND 
             name='AutomaticDownload' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -85,7 +86,7 @@
             domain='com.apple.SoftwareUpdate' AND 
             name='AutomaticallyInstallMacOSUpdates' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -101,17 +102,41 @@
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.SoftwareUpdate' AND 
             name='AutomaticallyInstallAppUpdates' AND 
-            (value = 1 OR value = 'true') 
+            (value = 1 OR value = 'true') AND 
+            username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.SoftwareUpdate' AND 
             name='AutomaticallyInstallAppUpdates' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
+
+- name: MACOS - CIS - Ensure XProtect Is Running and Updated
+  platforms: macOS
+  platform: darwin
+  description: |
+    XProtect is Apple's native signature-based antivirus technology. XProtect both finds and blocks the execution of known malware. There are many AV and Endpoint Threat Detection and Response (ETDR) tools available for Mac OS. The native Apple provisioned tool looks for specific known malware and is completely integrated into the OS. No matter what other tools are being used, XProtect should have the latest signatures available.
+  resolution: |
+        Ask your system administrator to deploy a script that will configure:
+        /usr/bin/sudo /bin/launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.XProtect.daemon.scan.plist
+        /usr/bin/sudo /bin/launchctl load -w /Library/Apple/System/Library/LaunchDaemons/com.apple.XprotectFramework.PluginService.plist
+  query: |
+      SELECT 1
+      WHERE (
+          SELECT COUNT(*)
+          FROM launchd
+          WHERE path IN (
+              '/Library/Apple/System/Library/LaunchDaemons/com.apple.XprotectFramework.PluginService.plist',
+              '/Library/Apple/System/Library/LaunchDaemons/com.apple.XProtect.daemon.scan.plist'
+          )
+      ) = 2;
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1
+  contributors: defensivedepth
 
 - name: MACOS - CIS - Ensure Install Security Responses and System Files Is Enabled (MDM Required)
   platforms: macOS
@@ -136,7 +161,7 @@
             domain='com.apple.SoftwareUpdate' AND 
             name='CriticalUpdateInstall' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -156,16 +181,17 @@
     SELECT 1 WHERE 
       EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.SoftwareUpdate' AND 
-            name='ManagedDeferredInstallDelay' AND 
-            value <= 30 
+            domain='com.apple.applicationaccess' AND 
+            name='enforcedSoftwareUpdateDelay' AND 
+            value <= 30 AND 
+            username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.SoftwareUpdate' AND 
-            name='ManagedDeferredInstallDelay' AND 
+            domain='com.apple.applicationaccess' AND 
+            name='enforcedSoftwareUpdateDelay' AND 
             value > 30
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
@@ -204,74 +230,74 @@
   tags: compliance, CIS, CIS_Level2, decision-needed
   contributors: sharon-fdm
 
-#- name: MACOS - CIS - Ensure iCloud Drive storage solution is enabled (MDM Required)
-#  platforms: macOS
-#  platform: darwin
-#  description: |
-#    iCloud Drive is Apple's storage solution for applications on both macOS and iOS to use the same files that are resident in Apple's cloud storage. The iCloud Drive folder is available much like Dropbox, Microsoft OneDrive, or Google Drive.
-#    One of the concerns in public cloud storage is that proprietary data may be inappropriately stored in an end user's personal repository. Organizations that need specific controls on information should ensure that this service is turned off or the user knows what information must be stored on services that are approved for storage of controlled information.
-#    This query will check for the existance of the policy not its value (That should be set per organization's decision)
-#  resolution: |
-#    The administrator should configure this via MDM profile.
-#    Create or edit a configuration profile with the following information:
-#      1. The PayloadType string is com.apple.applicationaccess.
-#      2. The key to include is allowCloudDocumentSync.
-#      3. The key must be set to <true/>.
-#  query: |
-#    SELECT 1 WHERE 
-#      EXISTS (
-#        SELECT 1 FROM managed_policies WHERE 
-#            domain='com.apple.applicationaccess' AND 
-#            name='allowCloudDocumentSync' AND 
-#            (value = 1 OR value = 'true') AND 
-#            username = ''
-#        )
-#      AND NOT EXISTS (
-#        SELECT 1 FROM managed_policies WHERE 
-#            domain='com.apple.applicationaccess' AND 
-#            name='allowCloudDocumentSync' AND 
-#            (value != 1 AND value != 'true')
-#        );  
-#    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-#      Depending on your organization's decision, you can delete this policy or its counterpart.*/
-#  purpose: Informational
-#  tags: compliance, CIS, CIS_Level2, decision-needed
-#  contributors: sharon-fdm
+- name: MACOS - CIS - Ensure iCloud Drive storage solution is enabled (MDM Required)
+  platforms: macOS
+  platform: darwin
+  description: |
+    iCloud Drive is Apple's storage solution for applications on both macOS and iOS to use the same files that are resident in Apple's cloud storage. The iCloud Drive folder is available much like Dropbox, Microsoft OneDrive, or Google Drive.
+    One of the concerns in public cloud storage is that proprietary data may be inappropriately stored in an end user's personal repository. Organizations that need specific controls on information should ensure that this service is turned off or the user knows what information must be stored on services that are approved for storage of controlled information.
+    This query will check for the existance of the policy not its value (That should be set per organization's decision)
+  resolution: |
+    The administrator should configure this via MDM profile.
+    Create or edit a configuration profile with the following information:
+      1. The PayloadType string is com.apple.applicationaccess.
+      2. The key to include is allowCloudDocumentSync.
+      3. The key must be set to <true/>.
+  query: |
+    SELECT 1 WHERE 
+      EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.applicationaccess' AND 
+            name='allowCloudDocumentSync' AND 
+            (value = 1 OR value = 'true') AND 
+            username = ''
+        )
+      AND NOT EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.applicationaccess' AND 
+            name='allowCloudDocumentSync' AND 
+            (value != 1 AND value != 'true')
+        );  
+    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level2, decision-needed
+  contributors: sharon-fdm
 
-# - name: MACOS - CIS - Ensure iCloud Keychain is disabled (if your org policy is to disable it) (MDM Required)
-#   platforms: macOS
-#   platform: darwin
-#   description: |
-#     The iCloud keychain is Apple's password manager that works with macOS and iOS. The capability allows users to store passwords in either iOS or macOS for use in Safari on both platforms and other iOS-integrated applications. The most pervasive use is driven by iOS use rather than macOS. The passwords stored in a macOS keychain on an Enterprise-managed computer could be stored in Apple's cloud and then be available on a personal computer using the same account. The stored passwords could be for organizational as well as for personal accounts.
-#     If passwords are no longer being used as organizational tokens, they are not in scope for iCloud keychain storage.
-#     Rationale:
-#     Ensure that the iCloud keychain is used consistently with organizational requirements.
-#   resolution: |
-#     The administrator should configure this via MDM profile.
-#     Create or edit a configuration profile with the following information:
-#       1. The PayloadType string is com.apple.applicationaccess.
-#       2. The key to include is allowCloudKeychainSync.
-#       3. The key must be set to <false/>.
-#   query: |
-#     SELECT 1 WHERE 
-#       EXISTS (
-#         SELECT 1 FROM managed_policies WHERE 
-#             domain='com.apple.applicationaccess' AND 
-#             name='allowCloudKeychainSync' AND 
-#             (value = 0 OR value = 'false') AND 
-#             username = ''
-#         )
-#       AND NOT EXISTS (
-#         SELECT 1 FROM managed_policies WHERE 
-#             domain='com.apple.applicationaccess' AND 
-#             name='allowCloudKeychainSync' AND 
-#             (value != 0 AND value != 'false')
-#         );  
-#     /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-#       Depending on your organization's decision, you can delete this policy or its counterpart.*/
-#   purpose: Informational
-#   tags: compliance, CIS, CIS_Level2, decision-needed
-#   contributors: sharon-fdm
+- name: MACOS - CIS - Ensure iCloud Keychain is disabled (if your org policy is to disable it) (MDM Required)
+  platforms: macOS
+  platform: darwin
+  description: |
+    The iCloud keychain is Apple's password manager that works with macOS and iOS. The capability allows users to store passwords in either iOS or macOS for use in Safari on both platforms and other iOS-integrated applications. The most pervasive use is driven by iOS use rather than macOS. The passwords stored in a macOS keychain on an Enterprise-managed computer could be stored in Apple's cloud and then be available on a personal computer using the same account. The stored passwords could be for organizational as well as for personal accounts.
+    If passwords are no longer being used as organizational tokens, they are not in scope for iCloud keychain storage.
+    Rationale:
+    Ensure that the iCloud keychain is used consistently with organizational requirements.
+  resolution: |
+    The administrator should configure this via MDM profile.
+    Create or edit a configuration profile with the following information:
+      1. The PayloadType string is com.apple.applicationaccess.
+      2. The key to include is allowCloudKeychainSync.
+      3. The key must be set to <false/>.
+  query: |
+    SELECT 1 WHERE 
+      EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.applicationaccess' AND 
+            name='allowCloudKeychainSync' AND 
+            (value = 0 OR value = 'false') AND 
+            username = ''
+        )
+      AND NOT EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.applicationaccess' AND 
+            name='allowCloudKeychainSync' AND 
+            (value != 0 AND value != 'false')
+        );  
+    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level2, decision-needed
+  contributors: sharon-fdm
 
 - name: MACOS - CIS - Ensure iCloud Keychain is enabled (if your org policy is to enable it) (MDM Required)
   platforms: macOS
@@ -332,7 +358,7 @@
             domain='com.apple.applicationaccess' AND 
             name='allowCloudDesktopAndDocuments' AND 
             (value != 0 AND value != 'false')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: zwass
@@ -391,7 +417,7 @@
             domain='com.apple.applicationaccess' AND 
             name='allowAirDrop' AND 
             (value != 0 AND value != 'false')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
@@ -428,7 +454,7 @@
             domain='com.apple.applicationaccess' AND 
             name='allowAirPlayIncomingRequests' AND 
             (value != 0 AND value != 'false')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
@@ -436,13 +462,13 @@
 - name: MACOS - CIS - Ensure Set Time and Date Automatically Is Enabled (MDM Required)
   platforms: macOS
   platform: darwin
-  description:
+  description: 
   resolution: |
-    The administrator should configure this via MDM profile.
-    Create or edit a configuration profile with the following information:
-      1. The PayloadType string is com.apple.applicationaccess.
-      2. The key to include is forceAutomaticDateAndTime.
-      3. The key must be set to <true/>.
+      The administrator should configure this via MDM profile.
+      Create or edit a configuration profile with the following information:
+        1. The PayloadType string is com.apple.applicationaccess.
+        2. The key to include is forceAutomaticDateAndTime.
+        3. The key must be set to <true/>.
   query: |
     SELECT 1 WHERE 
       EXISTS (
@@ -457,22 +483,24 @@
             domain='com.apple.applicationaccess' AND 
             name='forceAutomaticDateAndTime' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
 
-- name: MACOS - CIS - Ensure Time Is Set Within Appropriate Limits (Fleetd Required)
+- name: MACOS - CIS - Ensure the Time Service Is Enabled
   platforms: macOS
   platform: darwin
   description: |
-    Correct date and time settings are required for authentication protocols, file creation, modification dates and log entries.
-    The time offset compared to time.apple.com must be between -270.x and 270.x seconds.
-  resolution: Make sure the device can connect to time.apple.com to synchronize time.
-  query: SELECT * FROM sntp_request WHERE server = 'time.apple.com' AND clock_offset_ms <= 270000 AND clock_offset_ms >= -270000;
+    In macOS 10.14, Apple replace ntp with timed for time services, and is used to ensure correct time is kept. Correct date and time settings are required for authentication protocols, file creation, modification dates and log entries. 
+  resolution: |
+        Ask your system administrator to deploy a script that will configure:
+        /usr/bin/sudo /bin/launchctl load -w /System/Library/LaunchDaemons/com.apple.timed.plist
+  query: |
+    SELECT 1 WHERE  EXISTS(SELECT * FROM processes WHERE path = '/usr/libexec/timed');
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
-  contributors: lucasmrod
+  contributors: defensivedepth
 
 - name: MACOS - CIS - Ensure DVD or CD Sharing Is Disabled
   platforms: macOS
@@ -501,7 +529,7 @@
   tags: compliance, CIS, CIS_Level1
   contributors: artemist-work
 
-- name: MACOS - CIS - Ensure Screen Sharing Is Disabled
+- name: MACOS - CIS - Ensure Screen Sharing Is Disabled 
   platforms: macOS
   platform: darwin
   description: |
@@ -722,7 +750,7 @@
             domain='com.apple.applicationaccess' AND 
             name='allowContentCaching' AND 
             (value != 0 AND value != 'false')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: sharon-fdm
@@ -750,7 +778,7 @@
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: artemist-work
-  
+
 - name: MACOS - CIS - Ensure Media Sharing Is Disabled (MDM Required)
   platforms: macOS
   platform: darwin
@@ -803,6 +831,7 @@
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: artemist-work
+
 - name: MACOS - CIS - Ensure Backup Automatically is Enabled If Time Machine Is Enabled (FDA Required)
   platforms: macOS
   platform: darwin
@@ -830,6 +859,7 @@
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: lucasmrod
+
 - name: MACOS - CIS - Ensure Time Machine Volumes Are Encrypted If Time Machine Is Enabled (FDA Required)
   platforms: macOS
   platform: darwin
@@ -863,6 +893,7 @@
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
+
 - name: MACOS - CIS - Ensure Show Wi-Fi status in Menu Bar Is Enabled (MDM Required)
   platforms: macOS
   platform: darwin
@@ -892,7 +923,7 @@
             domain='com.apple.controlcenter' AND 
             name='WiFi' AND 
             value != 18
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
@@ -925,46 +956,46 @@
             domain='com.apple.controlcenter' AND 
             name='Bluetooth' AND 
             value != 18
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
 
-#- name: MACOS - CIS - Ensure Siri is enabled (Based on organization's policy) (MDM Required)
-#  platforms: macOS
-#  platform: darwin
-#  description: |
-#    With macOS 10.12 Sierra, Apple has introduced Siri from iOS to macOS. While there are data spillage concerns with the use of data-gathering personal assistant software, the risk here does not seem greater in sending queries to Apple through Siri than in sending search terms in a browser to Google or Microsoft. While it is possible that Siri will be used for local actions rather than Internet searches, Siri could, in theory, tell Apple about confidential Programs and Projects that should not be revealed. This appears be a usage edge case.
-#    In cases where sensitive or protected data is processed and Siri could expose that information through assisting a user in navigating their machine, it should be disabled. Siri does need to phone home to Apple, so it should not be available from air-gapped networks as part of its requirements.
-#    Most of the use case data published has shown that Siri is a tremendous time saver on iOS where multiple screens and menus need to be navigated through. Information like sports scores, weather, movie times, and simple to-do items on existing calendars can be easily found with Siri. None of the standard use cases should be more risky than already approved activity.
-#  resolution: |
-#    Automated method:
-#    Ask your system administrator to deploy an MDM profile that enables the Bluetooth status in the menu bar.
-#    Create or edit a configuration profile with the following information:
-#    1. The `PayloadType` string is com.apple.applicationaccess.
-#    2. The key to include is allowAssistant.
-#    3. The key must be set to <true/>.
-#  query: |
-#    SELECT 1 WHERE 
-#      EXISTS (
-#        SELECT 1 FROM managed_policies WHERE 
-#            domain='com.apple.applicationaccess' AND 
-#            name='allowAssistant' AND 
-#            (value = 1 OR value = 'true') AND 
-#            username = ''
-#        )
-#      AND NOT EXISTS (
-#        SELECT 1 FROM managed_policies WHERE 
-#            domain='com.apple.applicationaccess' AND 
-#            name='allowAssistant' AND 
-#            (value != 1 AND value != 'true')
-#        );  
-#     /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-#      Depending on your organization's decision, you can delete this policy or its counterpart.*/
-#  purpose: Informational
-#  tags: compliance, CIS, CIS_Level1
-#  contributors: sharon-fdm
-#
+- name: MACOS - CIS - Ensure Siri is enabled (Based on organization's policy) (MDM Required)
+  platforms: macOS
+  platform: darwin
+  description: |
+    With macOS 10.12 Sierra, Apple has introduced Siri from iOS to macOS. While there are data spillage concerns with the use of data-gathering personal assistant software, the risk here does not seem greater in sending queries to Apple through Siri than in sending search terms in a browser to Google or Microsoft. While it is possible that Siri will be used for local actions rather than Internet searches, Siri could, in theory, tell Apple about confidential Programs and Projects that should not be revealed. This appears be a usage edge case.
+    In cases where sensitive or protected data is processed and Siri could expose that information through assisting a user in navigating their machine, it should be disabled. Siri does need to phone home to Apple, so it should not be available from air-gapped networks as part of its requirements.
+    Most of the use case data published has shown that Siri is a tremendous time saver on iOS where multiple screens and menus need to be navigated through. Information like sports scores, weather, movie times, and simple to-do items on existing calendars can be easily found with Siri. None of the standard use cases should be more risky than already approved activity.
+  resolution: |
+    Automated method:
+    Ask your system administrator to deploy an MDM profile that enables the Bluetooth status in the menu bar.
+    Create or edit a configuration profile with the following information:
+    1. The `PayloadType` string is com.apple.applicationaccess.
+    2. The key to include is allowAssistant.
+    3. The key must be set to <true/>.
+  query: |
+    SELECT 1 WHERE 
+      EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.applicationaccess' AND 
+            name='allowAssistant' AND 
+            (value = 1 OR value = 'true') AND 
+            username = ''
+        )
+      AND NOT EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.applicationaccess' AND 
+            name='allowAssistant' AND 
+            (value != 1 AND value != 'true')
+        );  
+     /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1
+  contributors: sharon-fdm
+
 - name: MACOS - CIS - Ensure Siri is disabled (Based on organization's policy) (MDM Required)
   platforms: macOS
   platform: darwin
@@ -1000,31 +1031,31 @@
   tags: compliance, CIS, CIS_Level1, decision-needed
   contributors: sharon-fdm
 
-#- name: MACOS - CIS - Ensure Siri field TypeToSiriEnabled is true (Based on organization's policy)
-#  platforms: macOS
-#  platform: darwin
-#  description: |
-#    Extention of CIS-2.5.1. This will check that Siri TypeToSiriEnabled field is true.
-#  resolution: |
-#    Ask your system administrator to deploy a script that will configure
-#    $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist TypeToSiriEnabled -bool true
-#  query: |
-#    SELECT 1 WHERE NOT EXISTS (
-#      SELECT 1 FROM users AS u
-#      LEFT JOIN (
-#        SELECT * FROM plist WHERE
-#          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
-#          key = 'TypeToSiriEnabled' AND
-#          value = '1') AS p
-#      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
-#      WHERE u.directory LIKE '/Users/%' AND
-#      p.value IS NULL
-#    );
-#    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-#      Depending on your organization's decision, you can delete this policy or its counterpart.*/
-#  purpose: Informational
-#  tags: compliance, CIS, CIS_Level1, decision-needed
-#  contributors: sharon-fdm
+- name: MACOS - CIS - Ensure Siri field TypeToSiriEnabled is true (Based on organization's policy)
+  platforms: macOS
+  platform: darwin
+  description: |
+    Extention of CIS-2.5.1. This will check that Siri TypeToSiriEnabled field is true.
+  resolution: |
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist TypeToSiriEnabled -bool true
+  query: |
+    SELECT 1 WHERE NOT EXISTS (
+      SELECT 1 FROM users AS u
+      LEFT JOIN (
+        SELECT * FROM plist WHERE
+          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
+          key = 'TypeToSiriEnabled' AND
+          value = '1') AS p
+      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
+      WHERE u.directory LIKE '/Users/%' AND
+      p.value IS NULL
+    );
+    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1, decision-needed
+  contributors: sharon-fdm
 
 - name: MACOS - CIS - Ensure Siri field TypeToSiriEnabled is false (Based on organization's policy)
   platforms: macOS
@@ -1032,8 +1063,8 @@
   description: |
     Extention of CIS-2.5.1. This will check that Siri TypeToSiriEnabled field is false.
   resolution: |
-    Ask your system administrator to deploy a script that will configure
-    $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist TypeToSiriEnabled -bool false
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist TypeToSiriEnabled -bool false
   query: |
     SELECT 1 WHERE NOT EXISTS (
       SELECT 1 FROM users AS u
@@ -1052,40 +1083,40 @@
   tags: compliance, CIS, CIS_Level1, decision-needed
   contributors: sharon-fdm
 
-#- name: MACOS - CIS - Ensure Siri field StatusMenuVisible is true (Based on organization's policy)
-#  platforms: macOS
-#  platform: darwin
-#  description: |
-#    Extention of CIS-2.5.1. This will check that Siri StatusMenuVisible field is true.
-#  resolution: |
-#    Ask your system administrator to deploy a script that will configure
-#    $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist StatusMenuVisible -bool true
-#  query: |
-#    SELECT 1 WHERE NOT EXISTS (
-#      SELECT 1 FROM users AS u
-#      LEFT JOIN (
-#        SELECT * FROM plist WHERE
-#          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
-#          key = 'StatusMenuVisible' AND
-#          value = '1') AS p
-#      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
-#      WHERE u.directory LIKE '/Users/%' AND
-#      p.value IS NULL
-#    );
-#    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-#      Depending on your organization's decision, you can delete this policy or its counterpart.*/
-#  purpose: Informational
-#  tags: compliance, CIS, CIS_Level1, decision-needed
-#  contributors: sharon-fdm
-#
+- name: MACOS - CIS - Ensure Siri field StatusMenuVisible is true (Based on organization's policy)
+  platforms: macOS
+  platform: darwin
+  description: |
+    Extention of CIS-2.5.1. This will check that Siri StatusMenuVisible field is true.
+  resolution: |
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist StatusMenuVisible -bool true
+  query: |
+    SELECT 1 WHERE NOT EXISTS (
+      SELECT 1 FROM users AS u
+      LEFT JOIN (
+        SELECT * FROM plist WHERE
+          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
+          key = 'StatusMenuVisible' AND
+          value = '1') AS p
+      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
+      WHERE u.directory LIKE '/Users/%' AND
+      p.value IS NULL
+    );
+    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1, decision-needed
+  contributors: sharon-fdm
+
 - name: MACOS - CIS - Ensure Siri field StatusMenuVisible is false (Based on organization's policy)
   platforms: macOS
   platform: darwin
   description: |
     Extention of CIS-2.5.1. This will check that Siri StatusMenuVisible field is false.
   resolution: |
-    Ask your system administrator to deploy a script that will configure
-    $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist StatusMenuVisible -bool false
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist StatusMenuVisible -bool false
   query: |
     SELECT 1 WHERE NOT EXISTS (
       SELECT 1 FROM users AS u
@@ -1110,8 +1141,8 @@
   description: |
     Extention of CIS-2.5.1. This will check that Siri VoiceTriggerUserEnabled field is true.
   resolution: |
-    Ask your system administrator to deploy a script that will configure
-    $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist VoiceTriggerUserEnabled -bool true
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist VoiceTriggerUserEnabled -bool true
   query: |
     SELECT 1 WHERE NOT EXISTS (
       SELECT 1 FROM users AS u
@@ -1136,8 +1167,8 @@
   description: |
     Extention of CIS-2.5.1. This will check that Siri VoiceTriggerUserEnabled field is false.
   resolution: |
-    Ask your system administrator to deploy a script that will configure
-    $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist VoiceTriggerUserEnabled -bool false
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist VoiceTriggerUserEnabled -bool false
   query: |
     SELECT 1 WHERE NOT EXISTS (
       SELECT 1 FROM users AS u
@@ -1156,31 +1187,31 @@
   tags: compliance, CIS, CIS_Level1, decision-needed
   contributors: sharon-fdm
 
-#- name: MACOS - CIS - Ensure Siri field LockscreenEnabled is true (Based on organization's policy)
-#  platforms: macOS
-#  platform: darwin
-#  description: |
-#    Extention of CIS-2.5.1. This will check that Siri LockscreenEnabled field is true.
-#  resolution: |
-#    Ask your system administrator to deploy a script that will configure
-#    $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist LockscreenEnabled -bool true
-#  query: |
-#    SELECT 1 WHERE NOT EXISTS (
-#      SELECT 1 FROM users AS u
-#      LEFT JOIN (
-#        SELECT * FROM plist WHERE
-#          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
-#          key = 'LockscreenEnabled' AND
-#          value = '1') AS p
-#      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
-#      WHERE u.directory LIKE '/Users/%' AND
-#      p.value IS NULL
-#    );
-#    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-#      Depending on your organization's decision, you can delete this policy or its counterpart.*/
-#  purpose: Informational
-#  tags: compliance, CIS, CIS_Level1, decision-needed
-#  contributors: sharon-fdm
+- name: MACOS - CIS - Ensure Siri field LockscreenEnabled is true (Based on organization's policy)
+  platforms: macOS
+  platform: darwin
+  description: |
+    Extention of CIS-2.5.1. This will check that Siri LockscreenEnabled field is true.
+  resolution: |
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist LockscreenEnabled -bool true
+  query: |
+    SELECT 1 WHERE NOT EXISTS (
+      SELECT 1 FROM users AS u
+      LEFT JOIN (
+        SELECT * FROM plist WHERE
+          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
+          key = 'LockscreenEnabled' AND
+          value = '1') AS p
+      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
+      WHERE u.directory LIKE '/Users/%' AND
+      p.value IS NULL
+    );
+    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1, decision-needed
+  contributors: sharon-fdm
 
 - name: MACOS - CIS - Ensure Siri field LockscreenEnabled is false (Based on organization's policy)
   platforms: macOS
@@ -1188,8 +1219,8 @@
   description: |
     Extention of CIS-2.5.1. This will check that Siri LockscreenEnabled field is false.
   resolution: |
-    Ask your system administrator to deploy a script that will configure
-    $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist LockscreenEnabled -bool false
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist LockscreenEnabled -bool false
   query: |
     SELECT 1 WHERE NOT EXISTS (
       SELECT 1 FROM users AS u
@@ -1226,10 +1257,10 @@
   tags: compliance, CIS, CIS_Level2
   contributors: sharon-fdm
 
-- name: MACOS - CIS - Ensure Location Services Is in the Menu Bar
+- name: MACOS - CIS - Ensure 'Show Location Icon in Control Center when System Services Request Your Location' Is Enabled
   platforms: macOS
   platform: darwin
-  description: Checks that Location Services option is presented in the Menu Bar.
+  description: This setting provides the user an understanding of the current status of Location Services and which applications are using it.
   resolution: |
     Automated method:
     Ask your system administrator to deploy an MDM profile that enables the "location services" icon in menu bar when System Services request your location.
@@ -1255,7 +1286,7 @@
     Safari can deny access from websites or prompt for access.
     Applications that support Location Services can be individually controlled in the Privacy tab in Security & Privacy under System Preferences.
     Access should be evaluated to ensure that privacy controls are as expected.
-    This query verifies that location services is disabled for all apps.
+    This query verifies that location services is disabled for all apps.    
   resolution: |
     Graphical Method:
         Perform the following steps to disable unnecessary applications from accessing Location Services:
@@ -1343,16 +1374,17 @@
     SELECT 1 WHERE 
       EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.AdLib' AND 
+            domain='com.apple.applicationaccess' AND 
             name='allowApplePersonalizedAdvertising' AND 
-            (value = 0 OR value = 'false') 
+            (value = 0 OR value = 'false') AND 
+            username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.AdLib' AND 
+            domain='com.apple.applicationaccess' AND 
             name='allowApplePersonalizedAdvertising' AND 
             (value != 0 AND value != 'false')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -1406,39 +1438,39 @@
   tags: compliance, CIS, CIS_Level2
   contributors: lucasmrod
 
-#- name: MACOS - CIS - Ensure Universal Control is enabled (Based on organization's policy) (MDM Required)
-#  platforms: macOS
-#  platform: darwin
-#  description: |
-#    Universal Control is an Apple feature that allows Mac users to control multiple other Macs and iPads with the same keyboard, mouse, and trackpad using the same Apple ID. The technology relies on already available iCloud services, particularly Handoff.
-#    Universal Control simplifies the use of iCloud connectivity of multiple computers using the same Apple ID. This may simplify data transfer from organizationally-managed and personal devices. The use of the same iCloud account and Handoff is the underlying concern that should be evaluated. The use of the same keyboard or mouse across multiple devices does not by itself decrease organizational security.
-#  resolution: |
-#    Automated method:
-#    Ask your system administrator to deploy an MDM profile that enables the Bluetooth status in the menu bar.
-#    Create or edit a configuration profile with the following information:
-#    1. The `PayloadType` string is com.apple.universalcontrol.
-#    2. The key to include is 'Disable'.
-#    3. The key must be set to <false/>.
-#  query: |
-#    SELECT 1 WHERE 
-#      EXISTS (
-#        SELECT 1 FROM managed_policies WHERE 
-#            domain='com.apple.universalcontrol' AND 
-#            name='Disable' AND 
-#            (value = 0 OR value = 'false') AND 
-#            username = ''
-#        )
-#      AND NOT EXISTS (
-#        SELECT 1 FROM managed_policies WHERE 
-#            domain='com.apple.universalcontrol' AND 
-#            name='Disable' AND 
-#            (value != 0 AND value != 'false')
-#        );  
-#    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-#      Depending on your organization's decision, you can delete this policy or its counterpart.*/
-#  purpose: Informational
-#  tags: compliance, CIS, CIS_Level1, decision-needed
-#  contributors: sharon-fdm
+- name: MACOS - CIS - Ensure Universal Control is enabled (Based on organization's policy) (MDM Required)
+  platforms: macOS
+  platform: darwin
+  description: |
+    Universal Control is an Apple feature that allows Mac users to control multiple other Macs and iPads with the same keyboard, mouse, and trackpad using the same Apple ID. The technology relies on already available iCloud services, particularly Handoff.
+    Universal Control simplifies the use of iCloud connectivity of multiple computers using the same Apple ID. This may simplify data transfer from organizationally-managed and personal devices. The use of the same iCloud account and Handoff is the underlying concern that should be evaluated. The use of the same keyboard or mouse across multiple devices does not by itself decrease organizational security.
+  resolution: |
+    Automated method:
+    Ask your system administrator to deploy an MDM profile that enables the Bluetooth status in the menu bar.
+    Create or edit a configuration profile with the following information:
+    1. The `PayloadType` string is com.apple.universalcontrol.
+    2. The key to include is 'Disable'.
+    3. The key must be set to <false/>.
+  query: |
+    SELECT 1 WHERE 
+      EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.universalcontrol' AND 
+            name='Disable' AND 
+            (value = 0 OR value = 'false') AND 
+            username = ''
+        )
+      AND NOT EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.universalcontrol' AND 
+            name='Disable' AND 
+            (value != 0 AND value != 'false')
+        );  
+    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1, decision-needed
+  contributors: sharon-fdm
 
 - name: MACOS - CIS - Ensure Universal Control is disabled (Based on organization's policy) (MDM Required)
   platforms: macOS
@@ -1542,15 +1574,16 @@
     that can be attempted against the RAM that has the encryption keys or the running operating system protected
     by a login screen.
 
-    Mac systems should be set to hibernate after sleeping for a risk-acceptable time period.
     MacBooks should be set so that the `standbydelay` is 15 minutes (900 seconds) or less.
+    Mac systems should be set to hibernate after sleeping for a risk-acceptable time period.
+    Organizations may still decide to use hibernate after sleeping if there is a security need 
+    (ex. international travel), but it can cause kernel panics in Apple Silicon Macs.
   resolution: |
     Ask your system administrator to deploy the following script to Macbook devices:
     if [[ $(uname -m) == 'arm64' ]]; then
             # Apple silicon
             /usr/bin/sudo /usr/bin/pmset -a standby 900
             /usr/bin/sudo /usr/bin/pmset -a destroyfvkeyonstandby 1
-            /usr/bin/sudo /usr/bin/pmset -a hibernatemode 25
     else
             # Intel
             /usr/bin/sudo /usr/bin/pmset -a standbydelaylow 900
@@ -1591,12 +1624,11 @@
             SELECT 1 FROM system_info WHERE cpu_type = 'arm64e'
           ) AND EXISTS (
             SELECT
-                CAST(JSON_EXTRACT(battery, '$.standby') AS INTEGER) AS standby,
-                CAST(JSON_EXTRACT(battery, '$.hibernatemode') AS INTEGER) AS hibernatemode
+                CAST(JSON_EXTRACT(battery, '$.standby') AS INTEGER) AS standby
             FROM (
                 SELECT JSON_EXTRACT(json_result, '$.Battery Power:') AS battery FROM pmset WHERE getting = 'custom'
             )
-            WHERE standby <= 900 AND hibernatemode = 25
+            WHERE standby <= 900
           )
         )
     );
@@ -1644,7 +1676,7 @@
             domain='com.apple.screensaver' AND 
             name='askForPasswordDelay' AND 
             value > 5
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -1682,25 +1714,36 @@
         4. Verify that Share Mac Analytics is not enabled
         5. Verify that Share with App Developers is not enabled
         6. Verify that Improve Siri & Dictation is not enabled
+        7. Verify that Improve Assistive Voice Features is not enabled 
   query: |
     SELECT 1 WHERE 
       EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.SubmitDiagInfo' AND 
             name='AutoSubmit' AND 
-            (value = 0 OR value = 'false') 
+            (value = 0 OR value = 'false') AND 
+            username = ''
         )
       AND EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.applicationaccess' AND 
             name='allowDiagnosticSubmission' AND 
-            (value = 0 OR value = 'false') 
+            (value = 0 OR value = 'false') AND 
+            username = ''
+        )
+      AND EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.Accessibility' AND 
+            name='AXSAudioDonationSiriImprovementEnabled' AND 
+            (value = 0 OR value = 'false') AND 
+            username = ''
         )
       AND EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.applicationaccess' AND 
             name='Siri Data Sharing Opt-In Status' AND 
-            value = 2 
+            value = 2 AND 
+            username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
@@ -1719,7 +1762,7 @@
             domain='com.apple.applicationaccess' AND 
             name='Disable' AND 
             value != 2
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: sharon-fdm
@@ -1750,7 +1793,7 @@
             domain='com.apple.screensaver' AND 
             name='idleTime' AND 
             CAST(value AS INT) > 1200
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -1806,7 +1849,7 @@
         SELECT 1 FROM disk_encryption WHERE 
             user_uuid IS NOT "" AND 
             filevault_status = 'on' 
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -1837,7 +1880,7 @@
             domain='com.apple.loginwindow' AND 
             name='SHOWFULLNAME' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -1868,7 +1911,7 @@
             domain='com.apple.loginwindow' AND 
             name='RetriesUntilHint' AND 
             (value != 0 AND value != 'false')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -1952,17 +1995,17 @@
     SELECT 1 WHERE 
       EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.loginwindow' AND 
-            name='com.apple.login.mcx.DisableAutoLoginClient' AND 
+            domain='com.apple.login.mcx.DisableAutoLoginClient' AND 
+            name='Disable' AND 
             (value = 1 OR value = 'true') AND 
             username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.loginwindow' AND 
-            name='com.apple.login.mcx.DisableAutoLoginClient' AND 
+            domain='com.apple.login.mcx.DisableAutoLoginClient' AND 
+            name='Disable' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
@@ -1997,12 +2040,13 @@
   platforms: macOS
   platform: darwin
   description: |
-    macOS's audit facility, auditd, receives notifications from the kernel when certain system calls, such as open, fork, and exit, are made. These notifications are captured and written to an audit log.
+    macOS's audit facility, auditd, receives notifications from the kernel when certain system calls, such as open, fork, and exit, are made. These notifications are captured and written to an audit log. Apple has deprecated auditd as of macOS 11.0 Big Sur. In macOS 14.0 Sonoma it is no longer enabled by default..
   resolution: |
     Automated method:
-    Ask your system administrator to deploy the following script which will enable security auditing:
+    Ask your system administrator to deploy the following script which will enable security auditing and create the audit_control file::
     /usr/bin/sudo /bin/launchctl load -w /System/Library/LaunchDaemons/com.apple.auditd.plist
-  query: |
+    /usr/bin/sudo /bin/cp /etc/security/audit_control.example /etc/security/audit_control
+  query: | 
     SELECT 1 WHERE EXISTS (
       SELECT
         l.program, l.label, l.program_arguments,
@@ -2108,9 +2152,9 @@
     expire-after:60d OR 5G
     This recomendation is based on minimum storage for review and investigation. When a third party tool is in use to allow remote logging or the store and forwarding of logs, this local storage requirement is not required.
   resolution: |
-    'Automated method:
+    Automated method:
     Ask your system administrator to deploy the following script which will ensure proper Security Auditing Retention:
-    cp /etc/security/audit_control ./tmp.txt; origExpire=$(cat ./tmp.txt  | grep expire-after);  sed "s/[$]{origExpire}/expire-after:60d OR 5G/" ./tmp.txt > /etc/security/audit_control; rm ./tmp.txt;'
+    cp /etc/security/audit_control ./tmp.txt; origExpire=$(cat ./tmp.txt  | grep expire-after);  sed "s/{origExpire}/expire-after:60d OR 5G/" ./tmp.txt > /etc/security/audit_control; rm ./tmp.txt;
   query: |
     SELECT 1 WHERE EXISTS (
       SELECT line,
@@ -2129,14 +2173,16 @@
   platforms: macOS
   platform: darwin
   description: |
-    The audit system on macOS writes important operational and security information that can be both useful for an attacker and a place for an attacker to attempt to obfuscate unwanted changes that were recorded. As part of defense-in-depth the /etc/security/audit_control configuration and the files in /var/audit should be owned only by root with group wheel with read-only rights and no other access allowed. macOS ACLs should not be used for these files.
+    The audit system on macOS writes important operational and security information that can be both useful for an attacker and a place for an attacker to attempt to obfuscate unwanted changes that were recorded. As part of defense-in-depth, the /etc/security/audit_control configuration and the files in /var/audit should be owned only by root with group wheel with read-only rights and no other access allowed. macOS ACLs should not be used for these files.
+
+    The default folder for storing logs is /var/audit, but it can be changed. This recommendation will ensure that any target directory has appropriate access control in place even if the target directory is not the default of /var/audit.
   resolution: |
     Automated method:
     Ask your system administrator to deploy the following script which will Ensure Access to Audit Records Is Controlled:
       /usr/bin/sudo /usr/sbin/chown -R root:wheel /etc/security/audit_control
-      /usr/bin/sudo /bin/chmod -R o-rw /etc/security/audit_control
-      /usr/bin/sudo /usr/sbin/chown -R root:wheel /var/audit/
-      /usr/bin/sudo /bin/chmod -R o-rw /var/audit/
+      /usr/bin/sudo /bin/chmod -R og-rw /etc/security/audit_control
+      /usr/bin/sudo /usr/sbin/chown -R root:wheel $(/usr/bin/sudo /usr/bin/grep '^dir' /etc/security/audit_control | /usr/bin/awk -F: '{print 2}')
+      /usr/bin/sudo /bin/chmod -R og-rw $(/usr/bin/sudo /usr/bin/grep '^dir' /etc/security/audit_control | /usr/bin/awk -F: '{print 2}')
   query: |
     SELECT 1 WHERE 
       -- For all files in /var/audit:
@@ -2167,71 +2213,6 @@
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
 
-- name: MACOS - CIS - Ensure Firewall Logging Is Enabled and Configured (MDM Required)
-  platforms: macOS
-  platform: darwin
-  description: |
-    The socketfilter Firewall is what is used when the Firewall is turned on in the Security & Privacy Preference Pane. In order to appropriately monitor what access is allowed and denied, logging must be enabled. The logging level must be set to "detailed" to be useful in monitoring connection attempts that the firewall detects. Throttled login is not sufficient for examine Firewall connection attempts.
-  resolution: |
-    Profile Method:
-    Create or edit a configuration profile with the following information:
-    1. The Payload Type string is com.apple.security.firewall 
-    2. The key to include is EnableFirewall
-    3. The key must be set to<true/>
-    4. The key to also include is EnableLogging
-    5. The key must be set to<true/>
-    6. The key to also include is LoggingOption
-    7. The key must be set to <string>detail</string>
-  query: |
-    SELECT 1 WHERE
-    (
-      EXISTS (
-        SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.security.firewall' AND 
-            name='EnableLogging' AND 
-            (value = 1 OR value = 'true') AND 
-            username = ''
-        )
-      AND EXISTS (
-        SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.security.firewall' AND 
-            name='LoggingOption' AND 
-            value = "detail" AND 
-            username = ''
-        )
-      AND NOT EXISTS (
-        SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.security.firewall' AND 
-            name='EnableLogging' AND 
-            (value != 1 AND value != 'true')
-        )
-      AND NOT EXISTS (
-        SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.security.firewall' AND 
-            name='LoggingOption' AND 
-            value != "detail"
-        )
-    )
-    OR
-    (
-      EXISTS ( 
-        SELECT 1 FROM plist WHERE 
-            path='/Library/Preferences/com.apple.alf.plist' AND 
-            key='loggingenabled' AND 
-            value = 1 
-        )
-      AND EXISTS ( 
-        SELECT 1 FROM plist WHERE 
-        path='/Library/Preferences/com.apple.alf.plist' AND 
-        key='loggingoption' AND 
-        value = 2 
-        )
-    );
-
-  purpose: Informational
-  tags: compliance, CIS, CIS_Level1
-  contributors: sharon-fdm
-
 - name: MACOS - CIS - Ensure Bonjour Advertising Services Is Disabled (MDM Required)
   platforms: macOS
   platform: darwin
@@ -2252,14 +2233,15 @@
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.mDNSResponder' AND 
             name='NoMulticastAdvertisements' AND 
-            (value = 1 OR value = 'true') 
+            (value = 1 OR value = 'true') AND 
+            username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.mDNSResponder' AND 
             name='NoMulticastAdvertisements' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: lucasmrod
@@ -2381,7 +2363,6 @@
   description: |
     Applications in the System Applications Directory (/Applications) should be world- executable since that is their reason to be on the system. They should not be world- writable and allow any process or user to alter them for other processes or users to then execute modified versions.
   resolution: |
-    Replace [$] with $ for apps variable
     Ask your system administrator to deploy a script that will configure all *.app under /Applications folders to have no write permissions for 'others'. 
     $ /usr/bin/sudo IFS=$'\n'
       for apps in $( /usr/bin/find /Applications -iname "*\.app" -type d -perm -2 ); 
@@ -2406,15 +2387,12 @@
   platforms: macOS
   platform: darwin
   description: |
-    Software sometimes insists on being installed in the /System/Volumes/Data/System Directory and has inappropriate world-writable permissions.
-    Macs with writable files in System should be investigated forensically. A file with open writable permissions is a sign of at best a rogue application.
-    It could also be a sign of a computer compromise and a persistent presence on the system.
-    The audit check excludes the "Drop Box" folder that is part of Apple's default user template.
+    Software sometimes insists on being installed in the /System/Volumes/Data/System Directory and has inappropriate world-writable permissions. Macs with writable files in System should be investigated forensically. A file with open writable permissions is a sign of at best a rogue application. It could also be a sign of a computer compromise and a persistent presence on the system.
   resolution: |
     Replace [$] with $ for sysPermissions variable
     Ask your system administrator to deploy a script that will ensure folders are not world-writable in the /System folder. 
     /usr/bin/sudo IFS=$'\n'
-    for sysPermissions in $( /usr/bin/find /System/Volumes/Data/System -type d -perm -2 | /usr/bin/grep -v "Drop Box" ); 
+    for sysPermissions in $( /usr/bin/find /System/Volumes/Data/System -type d -perm -2 | /usr/bin/grep -vE "Drop Box|locks" ); 
     do
       /bin/chmod -R o-w "[$]sysPermissions"
     done
@@ -2527,7 +2505,7 @@
             domain='com.apple.mobiledevice.passwordpolicy' AND 
             name='requireAlphanumeric' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: sharon-fdm
@@ -2553,7 +2531,7 @@
             domain='com.apple.mobiledevice.passwordpolicy' AND 
             name='minComplexChars' AND 
             value < 1
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: sharon-fdm
@@ -2737,13 +2715,13 @@
   resolution: |
     Automated method:
     Ask your system administrator to deploy a script that runs the following:
-      /usr/bin/sudo /usr/bin/security authorizationdb write system.login.screensaver use-login-window-ui
+      /usr/bin/sudo /usr/bin/security authorizationdb write system.login.screensaver authenticate-session-owner
   query: |
     SELECT 1 WHERE EXISTS (
       SELECT JSON_EXTRACT(json_result, '$.rule') AS rule
       FROM authdb
       WHERE right_name = 'system.login.screensaver' AND 
-      rule LIKE '%use-login-window-ui%'
+      rule LIKE '%authenticate-session-owner%'
     );
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
@@ -2836,14 +2814,15 @@
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='AutoOpenSafeDownloads' AND 
-            (value = 0 OR value = 'false') 
+            (value = 0 OR value = 'false') AND 
+            username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='AutoOpenSafeDownloads' AND 
             (value != 0 AND value != 'false')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: artemist-work
@@ -2884,14 +2863,15 @@
               365 - After one year
               36500 - Set Manually
               */
-            value = 31 
+            value = 1 AND 
+            username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='HistoryAgeInDaysLimit' AND 
-            value != 31
-        );
+            value != 1
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
   contributors: sharon-fdm
@@ -2920,7 +2900,7 @@
             domain='com.apple.loginwindow' AND 
             name='WarnAboutFraudulentWebsites' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: artemist-work
@@ -2981,7 +2961,7 @@
             domain='com.apple.Safari' AND 
             name='WebKitStorageBlockingPolicy' AND 
             value != '1' 
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
@@ -3014,35 +2994,35 @@
   tags: compliance, CIS, CIS_Level1, decision-needed
   contributors: artemist-work
 
-#- name: MACOS - CIS - Ensure the Hide IP Address in Safari is Disabled (Based on organization's policy)
-#  platforms: macOS
-#  platform: darwin
-#  description: |
-#    Public (Routable) IP addresses can be used to track people to their current location, including
-#    home and business addresses. While a valid IP addess is necessary to load the site the valid
-#    address does not need to be provided to known trackers and should be hidden.
-#    However, enabling this setting will proxy web information through a 3rd party service, which may
-#    not be allowed by your organization's policy.
-#  resolution: |
-#    Ask your system administrator to deploy a script that will configure "Hide IP Address in Safari" to Enabled
-#      $ /usr/bin/sudo -u <username> /usr/bin/defaults write
-#      /Users/<username>/Library/Containers/com.apple.Safari/Data/Library/Preferences
-#      /com.apple.Safari WBSPrivacyProxyAvailabilityTraffic -int 130272
-#  query: |
-#    SELECT 1 WHERE NOT EXISTS (
-#      SELECT 1 FROM users AS u
-#      LEFT JOIN (
-#        SELECT * FROM plist WHERE
-#          path LIKE '/Users/%/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist' AND
-#          key = 'WBSPrivacyProxyAvailabilityTraffic' AND
-#           ((value >> 2) & 1) = 0) AS p
-#      ON p.path = CONCAT(u.directory, '/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist')
-#      WHERE u.directory LIKE '/Users/%' AND
-#      p.value IS NULL
-#    );
-#  purpose: Informational
-#  tags: compliance, CIS, CIS_Level1, decision-needed
-#  contributors: artemist-work
+- name: MACOS - CIS - Ensure the Hide IP Address in Safari is Disabled (Based on organization's policy)
+  platforms: macOS
+  platform: darwin
+  description: |
+    Public (Routable) IP addresses can be used to track people to their current location, including
+    home and business addresses. While a valid IP addess is necessary to load the site the valid
+    address does not need to be provided to known trackers and should be hidden.
+    However, enabling this setting will proxy web information through a 3rd party service, which may
+    not be allowed by your organization's policy.
+  resolution: |
+    Ask your system administrator to deploy a script that will configure "Hide IP Address in Safari" to Enabled
+      $ /usr/bin/sudo -u <username> /usr/bin/defaults write
+      /Users/<username>/Library/Containers/com.apple.Safari/Data/Library/Preferences
+      /com.apple.Safari WBSPrivacyProxyAvailabilityTraffic -int 130272
+  query: |
+    SELECT 1 WHERE NOT EXISTS (
+      SELECT 1 FROM users AS u
+      LEFT JOIN (
+        SELECT * FROM plist WHERE
+          path LIKE '/Users/%/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist' AND
+          key = 'WBSPrivacyProxyAvailabilityTraffic' AND
+           ((value >> 2) & 1) = 0) AS p
+      ON p.path = CONCAT(u.directory, '/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist')
+      WHERE u.directory LIKE '/Users/%' AND
+      p.value IS NULL
+    );
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1, decision-needed
+  contributors: artemist-work
 
 - name: MACOS - CIS - Ensure Advertising Privacy Protection in Safari Is Enabled (FDA Required)
   platforms: macOS
@@ -3108,10 +3088,31 @@
             domain='com.apple.Safari' AND 
             name='ShowFullURLInSmartSearchField' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
+
+- name: MACOS - CIS - Ensure Show Status Bar Is Enabled (MDM Required)
+  platforms: macOS
+  platform: darwin
+  description: |
+    The Status Bar in Safari shows the full URL of any link on hover. It protects the user from visiting sites where the domain has been obfuscated by allowing the user to review whether the link points to an unexpected location.
+  resolution: |
+    Automated method:
+    Profile Method:
+    Create or edit a configuration profile with the following information:
+      1. The PayloadType string is com.apple.Safari
+      2. The key to include is ShowOverlayStatusBar 
+      3. The key must be set to: <true/>
+  query: |
+    SELECT 1 FROM managed_policies WHERE 
+      domain='com.apple.Safari' AND 
+      name='ShowOverlayStatusBar' AND 
+      (value = 1 OR value = 'true');
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1
+  contributors: defensivedepth
 
 - name: MACOS - CIS - Ensure Secure Keyboard Entry Terminal.app Is Enabled (MDM Required)
   platforms: macOS
@@ -3140,7 +3141,41 @@
             domain='com.apple.Terminal' AND 
             name='SecureKeyboardEntry' AND 
             (value != 1 AND value != 'true')
-        );
+        );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
+
+- name: MACOS - CIS -  Ensure Logging Is Enabled for Sudo (MDM Required)
+  platforms: macOS
+  platform: darwin
+  description: |
+    In order to properly monitor the use of the sudo command, logs events for any use of sudo should be captured in the unified log.
+  resolution: |
+    Ask your system administrator to deploy a script that will configure:
+      /usr/bin/sudo /usr/sbin/visudo -f /etc/sudoers
+      Remove the line, or comment out with # before the line, 'Defaults !log_allowed'
+  query: |
+    SELECT 1 
+    FROM file_lines 
+    WHERE path = '/etc/sudoers' 
+      AND (
+          -- No matching line
+          NOT EXISTS (
+              SELECT 1 
+              FROM file_lines 
+              WHERE path = '/etc/sudoers' 
+                AND line LIKE '%!log_allowed%'
+          ) 
+          -- OR line exists but is commented
+          AND NOT EXISTS (
+              SELECT 1 
+              FROM file_lines 
+              WHERE path = '/etc/sudoers' 
+                AND line LIKE '%#%Defaults%!log_allowed%'
+          )
+      ) 
+    LIMIT 1;
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1
+  contributors: defensivedepth
