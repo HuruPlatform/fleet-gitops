@@ -51,3 +51,15 @@ RUN:
 export FLEET_URL=https://fleet.shared.huru.co
 export FLEET_GLOBAL_ENROLL_SECRET= {token}
 ./gitops.sh
+
+
+
+# Download policy queries from Fleet's repository 
+# macOS 15
+wget https://raw.githubusercontent.com/fleetdm/fleet/main/ee/cis/macos-15/cis-policy-queries.yml
+
+# Windows 10 (note the same file name. Rename as needed.)
+wget https://raw.githubusercontent.com/fleetdm/fleet/main/ee/cis/win-10/cis-policy-queries.yml
+
+# Windows 11 (note the same file name. Rename as needed.)
+wget https://raw.githubusercontent.com/fleetdm/fleet/main/ee/cis/win-11/cis-policy-queries.yml
