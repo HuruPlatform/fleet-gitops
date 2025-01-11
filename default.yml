@@ -52,7 +52,7 @@ controls:
     - path: ./lib/macos/scripts/macos-remove-old-nudge.sh
     - path: ./lib/macos/scripts/macos-mdm-migration.sh
     - path: ./lib/macos/scripts/macos-system-maintenance.sh
-
+    - path: ./lib/macos/scripts/macos-mics.sh
     - path: ./lib/windows/scripts/windows-remove-fleetd.ps1
     - path: ./lib/windows/scripts/windows-turn-off-mdm.ps1
     - path: ./lib/windows/scripts/windows-install-bitdefender.ps1
