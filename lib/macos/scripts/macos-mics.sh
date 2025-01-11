@@ -74,7 +74,8 @@ sudo cp /etc/security/audit_control.example /etc/security/audit_control
 # 3.2 Configure Security Auditing Flags per local organizational requirements
 ################################################
 #print_info "Set auditing flags to 'all'"
-sudo sed -i.bu "s/^flags:.*/flags:all/g" /etc/security/audit_control 2> /dev/null 
+sudo sed -i.bu "s/^flags:.*/flags:-all/g" /etc/security/audit_control 2> /dev/null 
+sudo sed -i.bu "/^flags/ s/$/,lo,ad,aa/" /etc/security/audit_control 2> /dev/null
 ################################################
 # 3.4 Ensure security auditing retention
 ################################################
