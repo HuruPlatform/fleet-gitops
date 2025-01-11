@@ -22,4 +22,4 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "
 ################################################
 #print_info "Add login window banner"
 echo "$login_window_banner" | sudo tee /Library/Security/PolicyBanner.txt
-sudo chmod 755 "/Library/Security/PolicyBanner."*  2> /dev/null
+sudo chmod 644 "/Library/Security/PolicyBanner."*  2> /dev/null
