@@ -37,7 +37,7 @@ done
 ################################################
 #print_info "Ensure an administrator account cannot login to another user's active and locked session"
 sudo security authorizationdb write system.login.screensaver use-login-window-ui
-sudo security authorizationdb write system.login.screensaver authenticate-session-owner
+#sudo security authorizationdb write system.login.screensaver authenticate-session-owner
 ################################################
 # 5.2.6 Complex passwords must contain uppercase and lowercase letters
 ###############################################
