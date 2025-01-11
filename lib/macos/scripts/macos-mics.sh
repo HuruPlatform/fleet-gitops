@@ -56,7 +56,8 @@ done
 #print_info "Retain install.log for 365 days"
 sudo sed -i.bu '$s/$/ ttl=365/' /etc/asl/com.apple.install
 #print_info "Set maximum size to 1G"
-sudo sed -i.bu 's/all_max=[0-9]*[mMgG]/all_max=1G/g' /etc/asl/com.apple.install
+#sudo sed -i.bu 's/all_max=[0-9]*[mMgG]/all_max=1G/g' /etc/asl/com.apple.install
+sudo sed -i.bu 's/all_max=[0-9]*[mMgG]//g' /etc/asl/com.apple.install
 ################################################
 # 2.9 Disable Power Nap
 ################################################
@@ -103,3 +104,7 @@ for user in $users_list; do
     sudo -u "$user" defaults -currentHost write com.apple.controlcenter.plist WiFi -int 18
     sudo -u "$user" defaults -currentHost write com.apple.controlcenter.plist Bluetooth -int 18
 done
+################################################
+# 4.00 Ensure Logging Is Enabled for Sudo"
+################################################
+sudo sed -i '' '/log_allowed/s|^|#|' /etc/sudoers
