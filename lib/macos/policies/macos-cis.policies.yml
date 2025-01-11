@@ -3166,7 +3166,7 @@
                 AND line LIKE '%!log_allowed%'
           ) 
           -- OR line exists but is commented
-          AND NOT EXISTS (
+          OR  EXISTS (
               SELECT 1 
               FROM file_lines 
               WHERE path = '/etc/sudoers' 
