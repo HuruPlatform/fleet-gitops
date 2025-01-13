@@ -2862,13 +2862,13 @@
               365 - After one year
               36500 - Set Manually
               */
-            value = 31 
+            value = 365 
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='HistoryAgeInDaysLimit' AND 
-            value != 31
+            value != 365
         );  
   purpose: Informational
   tags: compliance, CIS, CIS_Level2
