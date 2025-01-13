@@ -93,10 +93,10 @@ done
 # 3.5 Control access to audit records
 ################################################
 #print_info "Set the audit records to the root user and wheel group"
-sudo chown -R root:wheel /etc/security/audit_control 2> /dev/null
-sudo chmod -R -o-rw /etc/security/audit_control 2> /dev/null
-sudo chown -R root:wheel /var/audit/ 2> /dev/null
-sudo chmod -R -o-rw /var/audit/ 2> /dev/null
+#sudo chown -R root:wheel /etc/security/audit_control 2> /dev/null
+#sudo chmod -R 400 /etc/security/audit_control 2> /dev/null
+#sudo chown -R root:wheel /var/audit/ 2> /dev/null
+#sudo chmod -R 440 /var/audit/ 2> /dev/null
 ################################################
 # 4.2 Enable "Show Wi-Fi/Bluetooth status in menu bar"
 ################################################
@@ -109,3 +109,10 @@ done
 # 4.00 Ensure Logging Is Enabled for Sudo"
 ################################################
 sudo sed -i '' '/log_allowed/s|^|#|' /etc/sudoers
+################################################
+# 4.2 Enable "Advertising Privacy Protection in Safari Is Enabled"
+################################################
+#print_info "Ensure Advertising Privacy Protection in Safari Is Enabled' for all users" 
+for user in $users_list; do
+    sudo -u "$user" defaults write /Users/"$user"/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari WebKitPreferences.privateClickMeasurementEnabled -bool true
+done

@@ -9,11 +9,13 @@
 			<false/>
 			<key>BlockStoragePolicy</key>
 			<integer>2</integer>
+			<key>WebKitPreferences.storageBlockingPolicy</key>
+			<integer>1</integer>
+			<key>WebKitStorageBlockingPolicy</key>
+			<integer>1</integer>
 			<key>DefaultBrowserPromptingState3</key>
 			<integer>2</integer>
 			<key>DidShowWhatsNewInSafari</key>
-			<true/>
-			<key>WarnAboutFraudulentWebsites</key>
 			<true/>
 			<key>HistoryAgeInDaysLimit</key>
 			<integer>365</integer>
@@ -27,6 +29,8 @@
 			<string>d22e7879-b051-43b8-b460-c5d9521c9b73</string>
 			<key>PayloadVersion</key>
 			<integer>1</integer>
+			<key>WarnAboutFraudulentWebsites</key>
+			<true/>
 		</dict>
 	</array>
 	<key>PayloadDescription</key>
