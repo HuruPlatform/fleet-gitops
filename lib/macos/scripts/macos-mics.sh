@@ -116,3 +116,11 @@ sudo sed -i '' '/log_allowed/s|^|#|' /etc/sudoers
 for user in $users_list; do
     sudo -u "$user" defaults write /Users/"$user"/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari WebKitPreferences.privateClickMeasurementEnabled -bool true
 done
+
+################################################
+# 4.2 Enable "Hide IP Address in Safari is Enabled"
+################################################
+#print_info "Hide IP Address in Safari is Enabled' for all users" 
+for user in $users_list; do
+    sudo -u "$user" defaults write /Users/"$user"/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari WBSPrivacyProxyAvailabilityTraffic -int 130276
+done
