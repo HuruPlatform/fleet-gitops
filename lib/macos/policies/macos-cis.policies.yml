@@ -2925,22 +2925,19 @@
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='BlockStoragePolicy' AND 
-            value = '2' AND 
-            username = ''
+            value = '2' 
         )
       AND EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='WebKitPreferences.storageBlockingPolicy' AND 
-            value = '1' AND 
-            username = ''
+            value = '1' 
         )
       AND EXISTS (
         SELECT 1 FROM managed_policies WHERE 
             domain='com.apple.Safari' AND 
             name='WebKitStorageBlockingPolicy' AND 
-            value = '1' AND 
-            username = ''
+            value = '1' 
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
