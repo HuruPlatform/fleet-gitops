@@ -64,12 +64,16 @@ sudo sed -i.bu 's/all_max=[0-9]*[mMgG]//g' /etc/asl/com.apple.install
 #print_info "Disable Power Nap"
 sudo pmset -a powernap 0
 ################################################
+# 2.8 Disable Wake for network access 
+################################################
+#print_info "Disable Wake for network access"
+sudo pmset -a womp 0 2> /dev/null 
+################################################
 # 3.1 Enable security auditing 
 ################################################
 #print_info "Enable security auditing "
 sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.auditd.plist 2> /dev/null
 sudo cp /etc/security/audit_control.example /etc/security/audit_control
-
 ################################################
 # 3.2 Configure Security Auditing Flags per local organizational requirements
 ################################################
