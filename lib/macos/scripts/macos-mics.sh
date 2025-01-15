@@ -128,3 +128,19 @@ done
 for user in $users_list; do
     sudo -u "$user" defaults write /Users/"$user"/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari WBSPrivacyProxyAvailabilityTraffic -int 130276
 done
+################################################
+# 5.1.3 Check System folder for world writable files
+################################################
+#/usr/bin/sudo IFS=$'\n'
+for sysPermissions in $( find /System/Volumes/Data/System -type d -perm -2 | grep -vE "Drop Box|locks" ); 
+do
+  chmod -R o-w "$sysPermissions"
+done
+################################################
+# 5.1.4 Check Library folder for world writable files
+################################################
+#/usr/bin/sudo IFS=$'\n'
+for libPermissions in $( find /System/Volumes/Data/Library -type d -perm -2 | grep -v Caches | grep -v /Preferences/Audio/Data); 
+do
+  chmod -R o-w "$libPermissions"
+done
