@@ -164,7 +164,7 @@ fi
 ################################################
 #print_info "Disable Siri"
 for user in $users_list; do
-   # sudo -u "$user" defaults write com.apple.assistant.support.plist 'Assistant Enabled' -bool false 2> /dev/null
+    sudo -u "$user" defaults write com.apple.assistant.support.plist 'Assistant Enabled' -bool false 2> /dev/null
     sudo -u "$user" defaults write com.apple.Siri.plist LockscreenEnabled -bool false 2> /dev/null
     sudo -u "$user" defaults write com.apple.Siri.plist StatusMenuVisible -bool false 2> /dev/null
     sudo -u "$user" defaults write com.apple.Siri.plist VoiceTriggerUserEnabled -bool false 2> /dev/null
