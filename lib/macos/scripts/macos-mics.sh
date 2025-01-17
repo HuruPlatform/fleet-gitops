@@ -84,14 +84,13 @@ sudo sed -i.bu "/^flags/ s/$/,lo,ad,aa/" /etc/security/audit_control 2> /dev/nul
 # 3.4 Ensure security auditing retention
 ################################################
 #print_info "Set audit records expiration to 1 gigabyte"
-#sudo sed -i.bu "s/^expire-after:.*/expire-after:1G/g" /etc/security/audit_control
-sudo cp /etc/security/audit_control ./tmp.txt; origExpire=$(cat ./tmp.txt  | grep expire-after);  sed "s/{origExpire}/expire-after:60d OR 5G/" ./tmp.txt > /etc/security/audit_control; rm ./tmp.txt;
+sudo sed -i.bu "s/^expire-after:.*/expire-after:60d OR 5G/g" /etc/security/audit_control
 ################################################
 # 6.2 Turn on filename extensions
 ################################################
 #print_info "Turn on filename extensions"
 for user in $users_list; do
-    sudo -u "$user" defaults write /Users/"$user"/Library/Prefjrences/.GlobalPreferences.plist AppleShowAllExtensions -bool true
+    sudo -u "$user" defaults write /Users/"$user"/Library/Preferences/.GlobalPreferences.plist AppleShowAllExtensions -bool true
 done
 ################################################
 # 3.5 Control access to audit records
