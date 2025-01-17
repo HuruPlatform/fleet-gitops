@@ -21,6 +21,8 @@
 			<true/>
 			<key>WarnAboutFraudulentWebsites</key>
 			<true/>
+			<key>ShowOverlayStatusBar</key>
+			<true/>
 			<key>HistoryAgeInDaysLimit</key>
 			<integer>365</integer>
 			<key>PayloadDisplayName</key>

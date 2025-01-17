@@ -2497,14 +2497,14 @@
     SELECT 1 WHERE 
       EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.mobiledevice.passwordpolicy' AND 
+            domain='com.apple.screensaver' AND 
             name='requireAlphanumeric' AND 
             (value = 1 OR value = 'true') AND 
             username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.mobiledevice.passwordpolicy' AND 
+            domain='com.apple.screensaver' AND 
             name='requireAlphanumeric' AND 
             (value != 1 AND value != 'true')
         );  
@@ -2523,14 +2523,14 @@
     SELECT 1 WHERE 
       EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.mobiledevice.passwordpolicy' AND 
+            domain='com.apple.screensaver' AND 
             name='minComplexChars' AND 
             value >= 1 AND 
             username = ''
         )
       AND NOT EXISTS (
         SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.mobiledevice.passwordpolicy' AND 
+            domain='com.apple.screensaver' AND 
             name='minComplexChars' AND 
             value < 1
         );  
