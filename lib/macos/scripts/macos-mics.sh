@@ -132,7 +132,7 @@ done
 # 5.1.3 Check System folder for world writable files
 ################################################
 #/usr/bin/sudo IFS=$'\n'
-for sysPermissions in $( find /System/Volumes/Data/System -type d -perm -2 | grep -vE "Drop Box|locks" ); 
+for sysPermissions in $( find /System/Volumes/Data/System -type d -perm -2 | grep -vE "Drop Box|locks|downloadDir" ); 
 do
   chmod -R o-w "$sysPermissions"
 done
