@@ -25,6 +25,8 @@
 			<string>8C8382A1-04FF-48BE-8DE5-FF919836E0D4</string>
 			<key>PayloadVersion</key>
 			<integer>1</integer>
+			<key>RetriesUntilHint</key>
+			<integer>0</integer>
 			<key>SHOWFULLNAME</key>
 			<true/>
 			<key>com.apple.login.mcx.DisableAutoLoginClient</key>

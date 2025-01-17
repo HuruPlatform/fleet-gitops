@@ -2450,7 +2450,7 @@
       1. The PayloadType string is com.apple.mobiledevice.passwordpolicy 
       2. The key to include is maxFailedAttempts
       3. The key must be set to <integer><value≤5></integer>
-  query: SELECT 1 FROM  pwd_policy where max_failed_attempts <= 5;
+  query: SELECT 1 FROM  pwd_policy where max_failed_attempts <= 10;
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm

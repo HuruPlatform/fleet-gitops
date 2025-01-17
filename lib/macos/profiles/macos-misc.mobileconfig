@@ -5,14 +5,28 @@
 	<key>PayloadContent</key>
 	<array>
 		<dict>
+			<key>NoMulticastAdvertisements</key>
+			<true/>
+			<key>PayloadDisplayName</key>
+			<string>Bonjour</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.mDNSResponder.1670476A-B34C-4F17-A7CB-12327F5C8D9F</string>
+			<key>PayloadType</key>
+			<string>com.apple.mDNSResponder</string>
+			<key>PayloadUUID</key>
+			<string>1670476A-B34C-4F17-A7CB-12327F5C8D9F</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
 			<key>PayloadDisplayName</key>
 			<string>Restrictions</string>
 			<key>PayloadIdentifier</key>
-			<string>com.apple.applicationaccess.509EF8AA-2B51-4ED6-8EDE-F4D800530B97</string>
+			<string>com.apple.applicationaccess.DB88A945-77DB-492F-BE17-59ECE066DE3B</string>
 			<key>PayloadType</key>
 			<string>com.apple.applicationaccess</string>
 			<key>PayloadUUID</key>
-			<string>509EF8AA-2B51-4ED6-8EDE-F4D800530B97</string>
+			<string>DB88A945-77DB-492F-BE17-59ECE066DE3B</string>
 			<key>PayloadVersion</key>
 			<integer>1</integer>
 			<key>allowActivityContinuation</key>
@@ -23,6 +37,10 @@
 			<false/>
 			<key>allowAssistant</key>
 			<true/>
+			<key>allowAssistantUserGeneratedContent</key>
+			<false/>
+			<key>allowAssistantWhileLocked</key>
+			<false/>
 			<key>allowAutoUnlock</key>
 			<false/>
 			<key>allowCamera</key>
@@ -57,18 +75,56 @@
 			<true/>
 			<key>allowScreenShot</key>
 			<true/>
+			<key>allowSiriServerLogging</key>
+			<false/>
+			<key>allowSpotlightInternetResults</key>
+			<false/>
 			<key>allowiTunesFileSharing</key>
 			<true/>
 			<key>enforcedFingerprintTimeout</key>
 			<integer>172800</integer>
 			<key>enforcedSoftwareUpdateDelay</key>
 			<integer>7</integer>
+			<key>forceAssistantProfanityFilter</key>
+			<false/>
 			<key>forceDelayedSoftwareUpdates</key>
 			<true/>
 			<key>forceOnDeviceOnlyDictation</key>
 			<true/>
 			<key>ratingRegion</key>
 			<string>us</string>
+		</dict>
+		<dict>
+			<key>Assistant Enabled</key>
+			<false/>
+			<key>PayloadDisplayName</key>
+			<string>Assistant</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.assistant.support.0F6F8FD8-0FB2-47BA-BE40-D2CF3B340957</string>
+			<key>PayloadType</key>
+			<string>com.apple.assistant.support</string>
+			<key>PayloadUUID</key>
+			<string>0F6F8FD8-0FB2-47BA-BE40-D2CF3B340957</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>Siri Data Sharing Opt-In Status</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>Bluetooth</key>
+			<integer>18</integer>
+			<key>PayloadDisplayName</key>
+			<string>Control Center</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.controlcenter.BC27B1AF-FCAB-43CC-87AA-9CEECCFB6856</string>
+			<key>PayloadType</key>
+			<string>com.apple.controlcenter</string>
+			<key>PayloadUUID</key>
+			<string>BC27B1AF-FCAB-43CC-87AA-9CEECCFB6856</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>WiFi</key>
+			<integer>18</integer>
 		</dict>
 		<dict>
 			<key>AutoSubmit</key>
@@ -85,18 +141,18 @@
 			<integer>1</integer>
 		</dict>
 		<dict>
-			<key>NoMulticastAdvertisements</key>
-			<true/>
 			<key>PayloadDisplayName</key>
-			<string>Bonjour</string>
+			<string>Siri</string>
 			<key>PayloadIdentifier</key>
-			<string>com.apple.mDNSResponder.1670476A-B34C-4F17-A7CB-12327F5C8D9F</string>
+			<string>com.apple.Siri.CDAF4495-3FC5-428F-8E59-CA8B3C0B3FAA</string>
 			<key>PayloadType</key>
-			<string>com.apple.mDNSResponder</string>
+			<string>com.apple.Siri</string>
 			<key>PayloadUUID</key>
-			<string>1670476A-B34C-4F17-A7CB-12327F5C8D9F</string>
+			<string>CDAF4495-3FC5-428F-8E59-CA8B3C0B3FAA</string>
 			<key>PayloadVersion</key>
 			<integer>1</integer>
+			<key>StatusMenuVisible</key>
+			<false/>
 		</dict>
 	</array>
 	<key>PayloadDisplayName</key>
@@ -110,7 +166,7 @@
 	<key>PayloadType</key>
 	<string>Configuration</string>
 	<key>PayloadUUID</key>
-	<string>9D9E3FDE-C756-46BE-AB15-4E018EDA63AF</string>
+	<string>5C23014E-48A3-4DE3-BCA2-1B700239030A</string>
 	<key>PayloadVersion</key>
 	<integer>1</integer>
 </dict>
