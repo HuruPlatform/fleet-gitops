@@ -61,6 +61,10 @@
 			<true/>
 			<key>enforcedFingerprintTimeout</key>
 			<integer>172800</integer>
+			<key>enforcedSoftwareUpdateDelay</key>
+			<integer>7</integer>
+			<key>forceDelayedSoftwareUpdates</key>
+			<true/>
 			<key>forceOnDeviceOnlyDictation</key>
 			<true/>
 			<key>ratingRegion</key>

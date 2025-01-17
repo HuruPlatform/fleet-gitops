@@ -143,3 +143,19 @@ for libPermissions in $( find /System/Volumes/Data/Library -type d -perm -2 | gr
 do
   chmod -R o-w "$libPermissions"
 done
+################################################
+# 5.10 Ensure system is set to hibernate
+################################################
+#print_info "Set the hibernate delays and to ensure the FileVault keys are set to be destroyed on standby"
+if [[ $(uname -m) == 'arm64' ]]; then
+        # Apple silicon
+        sudo pmset -a standby 900
+        sudo pmset -a destroyfvkeyonstandby 1
+else
+        # Intel
+        sudo pmset -a standbydelaylow 900
+        sudo pmset -a standbydelayhigh 900
+        sudo pmset -a highstandbythreshold 90
+        sudo pmset -a destroyfvkeyonstandby 1
+        sudo pmset -a hibernatemode 25
+fi
