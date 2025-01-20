@@ -1031,40 +1031,14 @@
 #  tags: compliance, CIS, CIS_Level1, decision-needed
 #  contributors: sharon-fdm
 
-- name: MACOS - CIS - Ensure Siri field TypeToSiriEnabled is true (Based on organization's policy)
-  platforms: macOS
-  platform: darwin
-  description: |
-    Extention of CIS-2.5.1. This will check that Siri TypeToSiriEnabled field is true.
-  resolution: |
-        Ask your system administrator to deploy a script that will configure
-        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist TypeToSiriEnabled -bool true
-  query: |
-    SELECT 1 WHERE NOT EXISTS (
-      SELECT 1 FROM users AS u
-      LEFT JOIN (
-        SELECT * FROM plist WHERE
-          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
-          key = 'TypeToSiriEnabled' AND
-          value = '1') AS p
-      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
-      WHERE u.directory LIKE '/Users/%' AND
-      p.value IS NULL
-    );
-    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-      Depending on your organization's decision, you can delete this policy or its counterpart.*/
-  purpose: Informational
-  tags: compliance, CIS, CIS_Level1, decision-needed
-  contributors: sharon-fdm
-
-#- name: MACOS - CIS - Ensure Siri field TypeToSiriEnabled is false (Based on organization's policy)
+#- name: MACOS - CIS - Ensure Siri field TypeToSiriEnabled is true (Based on organization's policy)
 #  platforms: macOS
 #  platform: darwin
 #  description: |
-#    Extention of CIS-2.5.1. This will check that Siri TypeToSiriEnabled field is false.
+#    Extention of CIS-2.5.1. This will check that Siri TypeToSiriEnabled field is true.
 #  resolution: |
 #        Ask your system administrator to deploy a script that will configure
-#        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist TypeToSiriEnabled -bool false
+#        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist TypeToSiriEnabled -bool true
 #  query: |
 #    SELECT 1 WHERE NOT EXISTS (
 #      SELECT 1 FROM users AS u
@@ -1072,7 +1046,7 @@
 #        SELECT * FROM plist WHERE
 #          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
 #          key = 'TypeToSiriEnabled' AND
-#          value = '0') AS p
+#          value = '1') AS p
 #      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
 #      WHERE u.directory LIKE '/Users/%' AND
 #      p.value IS NULL
@@ -1082,6 +1056,32 @@
 #  purpose: Informational
 #  tags: compliance, CIS, CIS_Level1, decision-needed
 #  contributors: sharon-fdm
+
+- name: MACOS - CIS - Ensure Siri field TypeToSiriEnabled is false (Based on organization's policy)
+  platforms: macOS
+  platform: darwin
+  description: |
+    Extention of CIS-2.5.1. This will check that Siri TypeToSiriEnabled field is false.
+  resolution: |
+        Ask your system administrator to deploy a script that will configure
+        $ /usr/bin/sudo -u <username> /usr/bin/defaults write com.apple.Siri.plist TypeToSiriEnabled -bool false
+  query: |
+    SELECT 1 WHERE NOT EXISTS (
+      SELECT 1 FROM users AS u
+      LEFT JOIN (
+        SELECT * FROM plist WHERE
+          path LIKE '/Users/%/Library/Preferences/com.apple.Siri.plist' AND
+          key = 'TypeToSiriEnabled' AND
+          value = '0') AS p
+      ON p.path = CONCAT(u.directory, '/Library/Preferences/com.apple.Siri.plist')
+      WHERE u.directory LIKE '/Users/%' AND
+      p.value IS NULL
+    );
+    /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+  purpose: Informational
+  tags: compliance, CIS, CIS_Level1, decision-needed
+  contributors: sharon-fdm
 
 #- name: MACOS - CIS - Ensure Siri field StatusMenuVisible is true (Based on organization's policy)
 #  platforms: macOS
