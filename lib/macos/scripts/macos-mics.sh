@@ -185,8 +185,10 @@ for user in $users_list; do
     sudo dscl . -delete /Users/$user hint
 done
 ################################################
-#2.8.1 Audit Universal Control Settings
+# 5.2 Password Management
 ################################################
-#for user in $users_list; do
-#    sudo -u "$user" defaults -currentHost read com.apple.universalcontrol Disable -bool false 2> /dev/null
-#done
+################################################
+# 5.2.1 Configure account lockout threshold
+###############################################
+#print_info "Settings maximum failed login attempts to 10 before locking the account"
+sudo pwpolicy -n /Local/Default -setglobalpolicy "maxFailedLoginAttempts=10"
