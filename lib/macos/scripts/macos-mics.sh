@@ -168,4 +168,12 @@ for user in $users_list; do
     sudo -u "$user" defaults write com.apple.Siri.plist LockscreenEnabled -bool false 2> /dev/null
     sudo -u "$user" defaults write com.apple.Siri.plist StatusMenuVisible -bool false 2> /dev/null
     sudo -u "$user" defaults write com.apple.Siri.plist VoiceTriggerUserEnabled -bool false 2> /dev/null
+    sudo -u "$user" defaults write com.apple.Siri.plist TypeToSiriEnabled -bool false 2> /dev/null
 done
+################################################
+# 5.11 Require an administrator password to access system-wide preferences
+################################################
+#print_info "Enable administrator password requirement to access system-wide preferences"
+security authorizationdb read system.preferences > /tmp/system.preferences.plist
+/usr/libexec/PlistBuddy -c "Set :shared false" /tmp/system.preferences.plist
+security authorizationdb write system.preferences < /tmp/system.preferences.plist
