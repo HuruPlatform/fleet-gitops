@@ -79,6 +79,8 @@
 			<false/>
 			<key>allowSpotlightInternetResults</key>
 			<false/>
+			<key>allowUniversalControl</key>
+			<true/>
 			<key>allowiTunesFileSharing</key>
 			<true/>
 			<key>enforcedFingerprintTimeout</key>

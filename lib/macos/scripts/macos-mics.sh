@@ -184,3 +184,9 @@ security authorizationdb write system.preferences < /tmp/system.preferences.plis
 for user in $users_list; do
     sudo dscl . -delete /Users/$user hint
 done
+################################################
+#2.8.1 Audit Universal Control Settings
+################################################
+#for user in $users_list; do
+#    sudo -u "$user" defaults -currentHost read com.apple.universalcontrol Disable -bool false 2> /dev/null
+#done
