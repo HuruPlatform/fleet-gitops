@@ -177,3 +177,10 @@ done
 security authorizationdb read system.preferences > /tmp/system.preferences.plist
 /usr/libexec/PlistBuddy -c "Set :shared false" /tmp/system.preferences.plist
 security authorizationdb write system.preferences < /tmp/system.preferences.plist
+################################################
+# 5.15 Do not enter a password-related hint
+################################################
+#print_info "Delete password-related hint of all users if exist"
+for user in $users_list; do
+    sudo dscl . -delete /Users/$user hint
+done
