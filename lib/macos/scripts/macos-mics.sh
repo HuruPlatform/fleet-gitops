@@ -192,3 +192,9 @@ done
 ###############################################
 #print_info "Settings maximum failed login attempts to 10 before locking the account"
 sudo pwpolicy -n /Local/Default -setglobalpolicy "maxFailedLoginAttempts=10"
+################################################
+# 6.1.4 Disable "Allow guests to connect to shared folders"
+################################################
+#print_info "Disable 'Allow guests to connect to shared folders'"
+sudo defaults write /Library/Preferences/com.apple.AppleFileServer guestAccess -bool false
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server AllowGuestAccess -bool false
