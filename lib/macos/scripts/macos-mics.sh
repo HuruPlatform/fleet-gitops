@@ -198,3 +198,12 @@ sudo pwpolicy -n /Local/Default -setglobalpolicy "maxFailedLoginAttempts=10"
 #print_info "Disable 'Allow guests to connect to shared folders'"
 sudo defaults write /Library/Preferences/com.apple.AppleFileServer guestAccess -bool false
 sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server AllowGuestAccess -bool false
+################################################
+# 2.5.3 Show Location Icon in Control Center when System Services Request Your Location
+################################################
+sudo defaults write /Library/Preferences/com.apple.locationmenu.plist ShowSystemServices -bool true
+################################################
+# 5.3 Reduce the sudo timeout period
+################################################ 
+echo 'Defaults timestamp_timeout=0' | sudo tee -a /etc/sudoers.d/CIS_54_sudoconfiguration 
+sudo chown -R root:wheel /etc/sudoers.d/CIS_54_sudoconfiguration
