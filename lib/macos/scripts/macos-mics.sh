@@ -138,7 +138,7 @@ done
 ################################################
 # 5.1.4 Check Library folder for world writable files
 ################################################
-#/usr/bin/sudo IFS=$'\n'
+/usr/bin/sudo IFS=$'\n'
 for libPermissions in $( find /System/Volumes/Data/Library -type d -perm -2 | grep -v Caches | grep -v /Preferences/Audio/Data); 
 do
   chmod -R o-w "$libPermissions"
