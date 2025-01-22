@@ -2460,7 +2460,7 @@
     Create or edit a configuration profile with the following information:
       1. The PayloadType string is com.apple.mobiledevice.passwordpolicy 
       2. The key to include is minLength
-      3. The key must be set to <integer><value≥14></integer>
+      3. The key must be set to <integer><value≥8></integer>
   query: |
     SELECT 1 
     FROM (
@@ -2471,7 +2471,7 @@
     SELECT policy_description, policy_identifier, split(policy_content, '{', 1) AS length 
     FROM password_policy 
     WHERE policy_identifier LIKE '%minLength')) 
-    WHERE minlength >= 14);
+    WHERE minlength >= 8);
   purpose: Informational
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
