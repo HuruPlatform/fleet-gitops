@@ -5,10 +5,11 @@ org_contact="itsupport@huru.co"
 users_list=$(dscacheutil -q user | grep -A 3 -B 2 -e uid:\ 5'[0-9][0-9]' | grep name | cut -d' ' -f2)
 ## Messages 
 login_screen_msg="If you found this laptop please let $org know at $org_contact. A rewards will be provided.\nSi vous trouvez cet ordinateur, veuillez s'il vous plait contacter $org à $org_contact. Une récomponse sera attribuée."
-login_window_banner="* * * * * * * * * * W A R N I N G * * * * * * * * * *
-UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED
-You must have explicit, authorized permission to access or configure this device. Unauthorized attempts and actions to access or use this system may result in civil and/or criminal penalties. All activities performed on this device are logged and monitored
-* * * * * * * * * * * * * * * * * * * * * * * *"
+login_window_banner="
+                * * * * * * * * * * * * * * W A R N I N G * * * * * * * * * * * * * * * 
+                        UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED
+                You must have explicit, authorized permission to access or configure this device. Unauthorized attempts and actions to access or use this system may result in civil and/or criminal penalties. All activities performed on this device are logged and monitored
+                * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
 ################################################
 # 1.2 Enable Auto Update
 ################################################
@@ -207,3 +208,8 @@ sudo defaults write /Library/Preferences/com.apple.locationmenu.plist ShowSystem
 ################################################ 
 echo 'Defaults timestamp_timeout=0' | sudo tee -a /etc/sudoers.d/CIS_54_sudoconfiguration 
 sudo chown -R root:wheel /etc/sudoers.d/CIS_54_sudoconfiguration
+################################################
+# 2.4.5 Disable Remote Login 
+################################################
+#print_info "Disable remote login"
+sudo systemsetup -setremotelogin off 2> /dev/null
