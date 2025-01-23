@@ -137,14 +137,6 @@ do
   chmod -R o-w "$sysPermissions"
 done
 ################################################
-# 5.1.4 Check Library folder for world writable files
-################################################
-/usr/bin/sudo IFS=$'\n'
-for libPermissions in $( find /System/Volumes/Data/Library -type d -perm -2 | grep -v Caches | grep -v /Preferences/Audio/Data); 
-do
-  chmod -R o-w "$libPermissions"
-done
-################################################
 # 5.10 Ensure system is set to hibernate
 ################################################
 #print_info "Set the hibernate delays and to ensure the FileVault keys are set to be destroyed on standby"
@@ -213,3 +205,11 @@ sudo chown -R root:wheel /etc/sudoers.d/CIS_54_sudoconfiguration
 ################################################
 #print_info "Disable remote login"
 sudo systemsetup -setremotelogin off 2> /dev/null
+################################################
+# 5.1.4 Check Library folder for world writable files
+################################################
+IFS=$'\n'
+for libPermissions in $( find /System/Volumes/Data/Library -type d -perm -2 | grep -v Caches | grep -v /Preferences/Audio/Data); 
+do
+  chmod -R o-w "$libPermissions"
+done
