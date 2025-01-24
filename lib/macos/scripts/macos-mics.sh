@@ -204,7 +204,7 @@ sudo chown -R root:wheel /etc/sudoers.d/CIS_54_sudoconfiguration
 # 2.4.5 Disable Remote Login 
 ################################################
 #print_info "Disable remote login"
-sudo systemsetup -setremotelogin off 2> /dev/null
+#sudo systemsetup -setremotelogin off 2> /dev/null
 ################################################
 # 5.1.4 Check Library folder for world writable files
 ################################################

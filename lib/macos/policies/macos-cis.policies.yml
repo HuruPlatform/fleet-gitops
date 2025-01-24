@@ -961,40 +961,40 @@
   tags: compliance, CIS, CIS_Level1
   contributors: lucasmrod
 
-- name: MACOS - CIS - Ensure Siri is enabled (Based on organization's policy) (MDM Required)
-  platforms: macOS
-  platform: darwin
-  description: |
-    With macOS 10.12 Sierra, Apple has introduced Siri from iOS to macOS. While there are data spillage concerns with the use of data-gathering personal assistant software, the risk here does not seem greater in sending queries to Apple through Siri than in sending search terms in a browser to Google or Microsoft. While it is possible that Siri will be used for local actions rather than Internet searches, Siri could, in theory, tell Apple about confidential Programs and Projects that should not be revealed. This appears be a usage edge case.
-    In cases where sensitive or protected data is processed and Siri could expose that information through assisting a user in navigating their machine, it should be disabled. Siri does need to phone home to Apple, so it should not be available from air-gapped networks as part of its requirements.
-    Most of the use case data published has shown that Siri is a tremendous time saver on iOS where multiple screens and menus need to be navigated through. Information like sports scores, weather, movie times, and simple to-do items on existing calendars can be easily found with Siri. None of the standard use cases should be more risky than already approved activity.
-  resolution: |
-    Automated method:
-    Ask your system administrator to deploy an MDM profile that enables the Bluetooth status in the menu bar.
-    Create or edit a configuration profile with the following information:
-    1. The `PayloadType` string is com.apple.applicationaccess.
-    2. The key to include is allowAssistant.
-    3. The key must be set to <true/>.
-  query: |
-    SELECT 1 WHERE 
-      EXISTS (
-        SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.applicationaccess' AND 
-            name='allowAssistant' AND 
-            (value = 1 OR value = 'true') AND 
-            username = ''
-        )
-      AND NOT EXISTS (
-        SELECT 1 FROM managed_policies WHERE 
-            domain='com.apple.applicationaccess' AND 
-            name='allowAssistant' AND 
-            (value != 1 AND value != 'true')
-        );  
-     /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
-      Depending on your organization's decision, you can delete this policy or its counterpart.*/
-  purpose: Informational
-  tags: compliance, CIS, CIS_Level1
-  contributors: sharon-fdm
+#- name: MACOS - CIS - Ensure Siri is enabled (Based on organization's policy) (MDM Required)
+#  platforms: macOS
+#  platform: darwin
+#  description: |
+#    With macOS 10.12 Sierra, Apple has introduced Siri from iOS to macOS. While there are data spillage concerns with the use of data-gathering personal assistant software, the risk here does not seem greater in sending queries to Apple through Siri than in sending search terms in a browser to Google or Microsoft. While it is possible that Siri will be used for local actions rather than Internet searches, Siri could, in theory, tell Apple about confidential Programs and Projects that should not be revealed. This appears be a usage edge case.
+#    In cases where sensitive or protected data is processed and Siri could expose that information through assisting a user in navigating their machine, it should be disabled. Siri does need to phone home to Apple, so it should not be available from air-gapped networks as part of its requirements.
+#    Most of the use case data published has shown that Siri is a tremendous time saver on iOS where multiple screens and menus need to be navigated through. Information like sports scores, weather, movie times, and simple to-do items on existing calendars can be easily found with Siri. None of the standard use cases should be more risky than already approved activity.
+#  resolution: |
+#    Automated method:
+#    Ask your system administrator to deploy an MDM profile that enables the Bluetooth status in the menu bar.
+#    Create or edit a configuration profile with the following information:
+#    1. The `PayloadType` string is com.apple.applicationaccess.
+#    2. The key to include is allowAssistant.
+#    3. The key must be set to <true/>.
+#  query: |
+#    SELECT 1 WHERE 
+#      EXISTS (
+#        SELECT 1 FROM managed_policies WHERE 
+#            domain='com.apple.applicationaccess' AND 
+#            name='allowAssistant' AND 
+#            (value = 1 OR value = 'true') AND 
+#            username = ''
+#        )
+#      AND NOT EXISTS (
+#        SELECT 1 FROM managed_policies WHERE 
+#            domain='com.apple.applicationaccess' AND 
+#            name='allowAssistant' AND 
+#            (value != 1 AND value != 'true')
+#        );  
+#     /*CIS does not make a hard recommendation for this policy. Fleet has provided two policies (one failing, one succeeding). 
+#      Depending on your organization's decision, you can delete this policy or its counterpart.*/
+#  purpose: Informational
+#  tags: compliance, CIS, CIS_Level1
+#  contributors: sharon-fdm
 
 #- name: MACOS - CIS - Ensure Siri is disabled (Based on organization's policy) (MDM Required)
 #  platforms: macOS
@@ -2583,37 +2583,37 @@
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
 
-- name: MACOS - CIS - Ensure all user storage APFS volumes are encrypted (Fleetd Required)
-  platforms: macOS
-  platform: darwin
-  description: |
-    Apple developed a new file system which was first made available in 10.12 and then became the
-    default in 10.13. The file system is optimized for Flash and Solid-State storage and encryption.
-    https://en.wikipedia.org/wiki/Apple_File_System macOS computers generally have several volumes
-    created as part of APFS formatting, including Preboot, Recovery and Virtual Memory (VM), as well
-    as traditional user disks.
-    All APFS volumes that do not have specific roles and do not require encryption should be
-    encrypted. "Role" disks include Preboot, Recovery and VM. User disks are labelled with "(No
-    specific role)" by default.
-  resolution: |
-    Manual method:
-    Use Disk Utility to erase a user disk and format as APFS (Encrypted).
-    Note: APFS Encrypted disks will be described as "FileVault" whether they are the boot volume or not in the ap list.
-  query: |
-    SELECT 1 WHERE NOT EXISTS (
-      SELECT 1 FROM apfs_volumes WHERE
-        role != "VM" AND
-        role != "Update" AND
-        role != "Recovery" AND
-        role != "Preboot" AND
-        role != "xART" AND
-        role != "Hardware" AND
-        filevault != 1
-    );
-  purpose: Informational
-  tags: compliance, CIS, CIS_Level1
-  contributors: artemist-work
-
+#- name: MACOS - CIS - Ensure all user storage APFS volumes are encrypted (Fleetd Required)
+#  platforms: macOS
+#  platform: darwin
+#  description: |
+#    Apple developed a new file system which was first made available in 10.12 and then became the
+#    default in 10.13. The file system is optimized for Flash and Solid-State storage and encryption.
+#    https://en.wikipedia.org/wiki/Apple_File_System macOS computers generally have several volumes
+#    created as part of APFS formatting, including Preboot, Recovery and Virtual Memory (VM), as well
+#    as traditional user disks.
+#    All APFS volumes that do not have specific roles and do not require encryption should be
+#    encrypted. "Role" disks include Preboot, Recovery and VM. User disks are labelled with "(No
+#    specific role)" by default.
+#  resolution: |
+#    Manual method:
+#    Use Disk Utility to erase a user disk and format as APFS (Encrypted).
+#    Note: APFS Encrypted disks will be described as "FileVault" whether they are the boot volume or not in the ap list.
+#  query: |
+#    SELECT 1 WHERE NOT EXISTS (
+#      SELECT 1 FROM apfs_volumes WHERE
+#        role != "VM" AND
+#        role != "Update" AND
+#        role != "Recovery" AND
+#        role != "Preboot" AND
+#        role != "xART" AND
+#        role != "Hardware" AND
+#        filevault != 1
+#    );
+#  purpose: Informational
+#  tags: compliance, CIS, CIS_Level1
+#  contributors: artemist-work
+#
 - name: MACOS - CIS - Ensure all user storage CoreStorage volumes are encrypted (Fleetd Required)
   platforms: macOS
   platform: darwin
