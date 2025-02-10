@@ -213,3 +213,14 @@ for libPermissions in $( find /System/Volumes/Data/Library -type d -perm -2 | gr
 do
   chmod -R o-w "$libPermissions"
 done
+################################################
+# 2.4.3 Disable Screen Sharing
+################################################
+#print_info "Disable screen sharing"
+sudo launchctl disable system/com.apple.screensharing 2> /dev/null 
+################################################
+# 2.4. Password reset 
+################################################
+#print_info "Disable screen sharing"
+#sudo dscl . -passwd /Users/superadminhuru currentpassword newpassword  
+# sudosoftwareupdate -i -a -R
