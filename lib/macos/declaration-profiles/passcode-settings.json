@@ -1,0 +1,12 @@
+{
+    "Type": "com.apple.configuration.passcode.settings",
+    "Identifier": "com.fleetdm.config.passcode.settings",
+    "Payload": {
+        "RequireAlphanumericPasscode": true,
+        "MinimumLength": 12,
+        "MinimumComplexCharacters": 3,
+        "MaximumFailedAttempts": 5,
+        "MaximumGracePeriodInMinutes": 1,
+        "MaximumInactivityInMinutes": 5
+    }
+}
