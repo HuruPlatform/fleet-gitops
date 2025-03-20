@@ -1,20 +1,31 @@
-## Organisation info
-org="Huru Payments"
-org_contact="itsupport@huru.co"
-# List of current users
-users_list=$(dscacheutil -q user | grep -A 3 -B 2 -e uid:\ 5'[0-9][0-9]' | grep name | cut -d' ' -f2)
-## Messages 
-################################################
-# 1.1 Verify all Apple-provided software is current
-################################################
-#print_info "Check for system updates"
-#updates=$(softwareupdate -l 2>&1 | grep "No new software available.")
+#!/bin/bash
 
-#if [[ $updates =~ "No new software"* ]]; then
-#    echo  "No software updates available\n"
-#else 
-#    echo "System updates are available\n"
-#    nohup sudo softwareupdate -i -a > /tmp/output.txt 2> /tmp/error.txt >/dev/null &
-#
-#fi
-sudo softwareupdate -i -a -R
+LOG_FILE="/var/log/macos_update.log"
+TIMER=300  # Time in seconds before restart (5 minutes)
+
+echo "Starting macOS update process: $(date)" | tee -a "$LOG_FILE"
+
+# Check for available updates
+softwareupdate -l 2>&1 | tee -a "$LOG_FILE"
+
+# Install all available updates
+echo "Installing all available updates..." | tee -a "$LOG_FILE"
+softwareupdate --install --all --agree-to-license 2>&1 | tee -a "$LOG_FILE"
+
+# Check if update was successful
+if [ $? -eq 0 ]; then
+    echo "Updates installed successfully." | tee -a "$LOG_FILE"
+    
+    # Notify the user about restart
+    osascript -e 'display dialog "Your Mac will restart in 5 minutes to complete updates. Please save your work." buttons {"OK"} default button "OK" with title "System Update"'
+
+    # Wait before restart
+    echo "Waiting $TIMER seconds before restart..." | tee -a "$LOG_FILE"
+    sleep $TIMER
+
+    # Force restart
+    echo "Restarting now..." | tee -a "$LOG_FILE"
+    shutdown -r now
+else
+    echo "Update failed. No restart." | tee -a "$LOG_FILE"
+fi
