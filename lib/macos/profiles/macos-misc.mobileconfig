@@ -74,7 +74,7 @@
 			<key>allowMailPrivacyProtection</key>
 			<true/>
 			<key>allowScreenShot</key>
-			<true/>
+			<false/>
 			<key>allowSiriServerLogging</key>
 			<false/>
 			<key>allowSpotlightInternetResults</key>
