@@ -212,6 +212,20 @@
 			<key>PayloadVersion</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>PayloadDisplayName</key>
+			<string>Energy Saver, FileVault, Time Server, Mobile Accounts and Guest Account #1</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.MCX.391B883A-69DE-466F-9E31-012CA5F1D7FD</string>
+			<key>PayloadType</key>
+			<string>com.apple.MCX</string>
+			<key>PayloadUUID</key>
+			<string>391B883A-69DE-466F-9E31-012CA5F1D7FD</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>dontAllowFDEDisable</key>
+			<true/>
+		</dict>
 	</array>
 	<key>PayloadDisplayName</key>
 	<string>Various restriction settings</string>
