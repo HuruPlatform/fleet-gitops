@@ -57,7 +57,7 @@ controls:
     - path: ./lib/windows/scripts/windows-remove-fleetd.ps1
     - path: ./lib/windows/scripts/windows-turn-off-mdm.ps1
     - path: ./lib/windows/scripts/windows-install-bitdefender.ps1
-    - path: ./lib/windows/scripts/windows-enable-ms-defender.ps1
+    - path: ./lib/windows/scripts/windows-CaptureDisable.ps1
 
 org_settings:
   features:
