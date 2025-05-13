@@ -89,6 +89,8 @@
 			<integer>7</integer>
 			<key>forceAssistantProfanityFilter</key>
 			<false/>
+			<key>forceBypassScreenCaptureAlert</key>
+			<true/>
 			<key>forceDelayedSoftwareUpdates</key>
 			<true/>
 			<key>forceOnDeviceOnlyDictation</key>

@@ -1,4 +1,5 @@
 $regPath = "HKLM:\SOFTWARE\Policies\Microsoft\TabletPC"
+$regPath2 = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 
 # Create the key if it doesn't exist
 if (!(Test-Path $regPath)) {
@@ -7,6 +8,9 @@ if (!(Test-Path $regPath)) {
 
 # Set the DisableSnippingTool value
 New-ItemProperty -Path $regPath -Name "DisableSnippingTool" -Value 1 -PropertyType DWORD -Force
+# Set the DisableSnippingTool value to 0 to enable Snipping Tool
 
-Get-AppxProvisionedPackage -Online | Where-Object {$_.DisplayName -eq "Microsoft.ScreenSketch"} | Remove-AppxProvisionedPackage -Online
-Get-AppxPackage *ScreenSketch* | Remove-AppxPackage
+New-ItemProperty -Path $regPath2  -Name "DisabledHotkeys"  -PropertyType String -Value "S" -Force
+
+#Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "DisabledHotkeys" -ErrorAction SilentlyContinue
+
