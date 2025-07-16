@@ -2240,22 +2240,22 @@
   tags: compliance, CIS, CIS_Level1
   contributors: sharon-fdm
 
-- name: >
-    WINDOWS - CIS - Ensure 'Peer Name Resolution Protocol (PNRPsvc)' is set to 'Disabled'
-  platforms: win11
-  platform: windows
-  description: |
-    Enables serverless peer name resolution over the Internet using the Peer Name Resolution Protocol (PNRP).
-    The recommended state for this setting is: Disabled.
-  resolution: |
-    Automatic method:
-    Ask your system administrator to establish the recommended configuration via domain GP, set the following UI path to 'Disabled':
-    'Computer Configuration\Policies\Windows Settings\Security Settings\System Services\Peer Name Resolution Protocol'
-  query: |
-    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\PNRPsvc\\Start' AND data == 4);
-  purpose: Informational
-  tags: compliance, CIS, CIS_Level2
-  contributors: sharon-fdm
+#- name: >
+#    WINDOWS - CIS - Ensure 'Peer Name Resolution Protocol (PNRPsvc)' is set to 'Disabled'
+#  platforms: win11
+#  platform: windows
+#  description: |
+#    Enables serverless peer name resolution over the Internet using the Peer Name Resolution Protocol (PNRP).
+#    The recommended state for this setting is: Disabled.
+#  resolution: |
+#    Automatic method:
+#    Ask your system administrator to establish the recommended configuration via domain GP, set the following UI path to 'Disabled':
+#    'Computer Configuration\Policies\Windows Settings\Security Settings\System Services\Peer Name Resolution Protocol'
+#  query: |
+#    SELECT 1 FROM registry WHERE (path = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\PNRPsvc\\Start' AND data == 4);
+#  purpose: Informational
+#  tags: compliance, CIS, CIS_Level2
+#  contributors: sharon-fdm
 
 #- name: >
 #    WINDOWS - CIS - Ensure 'Peer Networking Grouping (p2psvc)' is set to 'Disabled'
@@ -4105,24 +4105,24 @@
   tags: compliance, CIS, CIS_Level1
   contributors: rachelelysia
 
-- name: >
-    WINDOWS - CIS - Ensure LAPS AdmPwd GPO Extension / CSE is installed
-  platforms: win11
-  platform: windows
-  description: |
-    In May 2015, Microsoft released the Local Administrator Password Solution (LAPS) tool, which is free and supported software that allows an organization to automatically set randomized and unique local Administrator account passwords on domain-attached workstations and Member Servers. The passwords are stored in a confidential attribute of the domain computer account and can be retrieved from Active Directory by approved Sysadmins when needed.
-    The LAPS tool requires a small Active Directory Schema update in order to implement, as well as installation of a Group Policy Client Side Extension (CSE) on targeted computers. Please see the LAPS documentation for details.
-    LAPS supports Windows Vista or newer workstation OSes, and Server 2003 or newer server OSes. LAPS does not support standalone computers - they must be joined to a domain.
-    Note #1: Organizations that utilize 3rd-party commercial software to manage unique & complex local Administrator passwords on domain members may opt to disregard these LAPS recommendations.
-    Note #2: LAPS is only designed to manage local Administrator passwords, and is therefore not recommended (or supported) for use directly on Domain Controllers, which do not have a traditional local Administrator account. We strongly encourage you to only deploy the LAPS CSE and LAPS GPO settings to member servers and workstations.
-  resolution: |
-    In order to utilize LAPS, a minor Active Directory Schema update is required, and a Group Policy Client Side Extension (CSE) must be installed on each managed computer. When LAPS is installed, the file AdmPwd.dll must be present in the following location and registered in Windows (the LAPS AdmPwd GPO Extension / CSE installation does this for you):
-    C:\Program Files\LAPS\CSE\AdmPwd.dll
-  query: |
-    SELECT 1 FROM registry where path = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\GPExtensions\{D76B9641-3288-4f75-942D-087DE603E3EA}\DllName';
-  purpose: Informational
-  tags: compliance, CIS, CIS_Level1
-  contributors: sharon-fdm
+#- name: >
+#    WINDOWS - CIS - Ensure LAPS AdmPwd GPO Extension / CSE is installed
+#  platforms: win11
+#  platform: windows
+#  description: |
+#    In May 2015, Microsoft released the Local Administrator Password Solution (LAPS) tool, which is free and supported software that allows an organization to automatically set randomized and unique local Administrator account passwords on domain-attached workstations and Member Servers. The passwords are stored in a confidential attribute of the domain computer account and can be retrieved from Active Directory by approved Sysadmins when needed.
+#    The LAPS tool requires a small Active Directory Schema update in order to implement, as well as installation of a Group Policy Client Side Extension (CSE) on targeted computers. Please see the LAPS documentation for details.
+#    LAPS supports Windows Vista or newer workstation OSes, and Server 2003 or newer server OSes. LAPS does not support standalone computers - they must be joined to a domain.
+#    Note #1: Organizations that utilize 3rd-party commercial software to manage unique & complex local Administrator passwords on domain members may opt to disregard these LAPS recommendations.
+#    Note #2: LAPS is only designed to manage local Administrator passwords, and is therefore not recommended (or supported) for use directly on Domain Controllers, which do not have a traditional local Administrator account. We strongly encourage you to only deploy the LAPS CSE and LAPS GPO settings to member servers and workstations.
+#  resolution: |
+#    In order to utilize LAPS, a minor Active Directory Schema update is required, and a Group Policy Client Side Extension (CSE) must be installed on each managed computer. When LAPS is installed, the file AdmPwd.dll must be present in the following location and registered in Windows (the LAPS AdmPwd GPO Extension / CSE installation does this for you):
+#    C:\Program Files\LAPS\CSE\AdmPwd.dll
+#  query: |
+#    SELECT 1 FROM registry where path = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\GPExtensions\{D76B9641-3288-4f75-942D-087DE603E3EA}\DllName';
+#  purpose: Informational
+#  tags: compliance, CIS, CIS_Level1
+#  contributors: sharon-fdm
 
 - name: >
     WINDOWS - CIS - Ensure 'Do not allow password expiration time longer than required by policy' is set to 'Enabled'
