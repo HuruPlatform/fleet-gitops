@@ -1,0 +1,1 @@
+p=$(pwd) && curl -k -o "${p}/action1_agent(Huru).pkg" "https://app.eu.action1.com/agent/fe1a0084-996c-11f0-b5f9-2762f9216329/Mac/agent(Huru).pkg" && sudo installer -pkg "${p}/action1_agent(Huru).pkg" -target /

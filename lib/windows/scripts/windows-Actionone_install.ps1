@@ -1,0 +1,1 @@
+curl -o "action1_agent(Huru).msi" "https://app.eu.action1.com/agent/fe1a0084-996c-11f0-b5f9-2762f9216329/Windows/agent(Huru).msi" && msiexec /i "action1_agent(Huru).msi" /quiet /qn
