@@ -9,12 +9,12 @@ policies:
 
   - path: ./lib/linux/policies/linux-device-health.policies.yml
 
-queries:
+reports:
 agent_options:
   path: ./lib/agent-options.yml
 controls:
-  macos_settings:
-    custom_settings:
+  apple_settings:
+    configuration_profiles:
       - path: ./lib/macos/profiles/macos-date-time.mobileconfig
       - path: ./lib/macos/profiles/macos-disable-bluetooth-file-sharing.mobileconfig
       - path: ./lib/macos/profiles/macos-disable-content-caching.mobileconfig

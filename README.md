@@ -48,8 +48,9 @@ For all configuration options, go to [GitOps reference](https://fleetdm.com/docs
 
 
 RUN:
-export FLEET_URL=https://fleet.shared.huru.co
-export FLEET_GLOBAL_ENROLL_SECRET= {token}
+export FLEET_URL=https://fleet.dev.huru.co
+export FLEET_API_TOKEN_DEV_EU=3jDC4eo8uwINBUXoY0NAxkLqcZkUX3qY
+export FLEET_GLOBAL_ENROLL_SECRET=3jDC4eo8uwINBUXoY0NAxkLqcZkUX3qY
 ./gitops.sh
 
 
