@@ -46,9 +46,14 @@ fi
 /bin/chmod 0644 /Library/Security/PolicyBanner.txt
 
 # --- Password hint -----------------------------------------------------------
-# Query: user_login_settings.password_hint_enabled = 0.
+# Query: user_login_settings.password_hint_enabled = 0, which osquery derives
+# from RetriesUntilHint in the loginwindow domain.
 LOG "disabling password hints"
 /usr/bin/defaults write /Library/Preferences/com.apple.loginwindow RetriesUntilHint -int 0
+# Also clear any per-account hint text, which is the other half of the CIS control.
+for U in $(/usr/bin/dscl . -list /Users UniqueID | /usr/bin/awk '$2 >= 500 {print $1}'); do
+  /usr/bin/dscl . -delete "/Users/$U" AuthenticationHint 2>/dev/null
+done
 
 # --- Sudo timeout ------------------------------------------------------------
 # Query requires /etc/sudoers.d owned root:wheel AND a zero timestamp timeout.
@@ -127,12 +132,23 @@ if [ -f "$AUDIT_CONTROL" ]; then
 fi
 
 # Query joins launchd against processes, so auditd must be loaded AND running.
+# Apple ships com.apple.auditd DISABLED on current macOS (launchd reports
+# disabled=1), so `bootstrap` alone is not enough -- the disabled override has to
+# be cleared first, and `load -w` is kept as a fallback because `enable` is a
+# no-op on some builds. Auditing is deprecated by Apple, so this may legitimately
+# remain unachievable on macOS 15+; check the log before chasing it further.
 LOG "enabling auditd"
 /bin/mkdir -p /var/audit
-/bin/launchctl enable system/com.apple.auditd 2>/dev/null
-/bin/launchctl bootstrap system /System/Library/LaunchDaemons/com.apple.auditd.plist 2>/dev/null
-/bin/launchctl kickstart -k system/com.apple.auditd 2>/dev/null
-/usr/sbin/audit -s 2>/dev/null
+/bin/launchctl enable system/com.apple.auditd 2>&1
+/bin/launchctl load -w /System/Library/LaunchDaemons/com.apple.auditd.plist 2>&1
+/bin/launchctl bootstrap system /System/Library/LaunchDaemons/com.apple.auditd.plist 2>&1
+/bin/launchctl kickstart -k system/com.apple.auditd 2>&1
+/usr/sbin/audit -s 2>&1
+if /usr/bin/pgrep -q auditd; then
+  LOG "  auditd is running"
+else
+  LOG "  auditd still not running (deprecated on this macOS release)"
+fi
 
 # --- Home folder permissions -------------------------------------------------
 LOG "securing home folders"
@@ -177,6 +193,15 @@ LOG "enabling Location Services (best effort)"
 /bin/launchctl enable system/com.apple.locationd 2>/dev/null
 /usr/bin/defaults write /var/db/locationd/Library/Preferences/ByHost/com.apple.locationd \
   LocationServicesEnabled -int 1 2>/dev/null
+
+# --- Flush the preferences cache ---------------------------------------------
+# MUST be last. cfprefsd caches every domain written above and serves the stale
+# value to osquery, so the plist on disk is correct while the policy still reads
+# the old state. This bit us on RetriesUntilHint: the file said 0 while
+# user_login_settings.password_hint_enabled still reported 1.
+# launchd restarts cfprefsd immediately; killing it is safe.
+LOG "flushing preferences cache so osquery sees the new values"
+/usr/bin/killall cfprefsd 2>/dev/null
 
 LOG "done"
 exit 0

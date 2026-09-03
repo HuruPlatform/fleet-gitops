@@ -74,5 +74,12 @@ LOG "enabling location icon for system services"
 /usr/bin/defaults write /Library/Preferences/com.apple.locationmenu ShowSystemServices -bool true
 /bin/chmod 0644 /Library/Preferences/com.apple.locationmenu.plist 2>/dev/null
 
+# --- Flush the preferences cache ---------------------------------------------
+# MUST be last. cfprefsd holds every domain written above in memory and hands the
+# stale copy to osquery, so a correct plist on disk still reads as non-compliant.
+# launchd restarts it immediately.
+LOG "flushing preferences cache so osquery sees the new values"
+/usr/bin/killall cfprefsd 2>/dev/null
+
 LOG "done"
 exit 0
