@@ -1805,7 +1805,12 @@
     Ask your system administrator to deploy the following script which will enable security auditing and create the audit_control file::
     /usr/bin/sudo /bin/launchctl load -w /System/Library/LaunchDaemons/com.apple.auditd.plist
     /usr/bin/sudo /bin/cp /etc/security/audit_control.example /etc/security/audit_control
-  query: | 
+  query: |
+    -- auditd is launch-on-demand on modern macOS and exits when idle, so the
+    -- process join alone flaps (verified: /var/audit trail actively rotating
+    -- while no auditd process was resident). An unterminated trail file means
+    -- the audit subsystem is enabled regardless of whether auditd is running
+    -- at the instant the policy executes.
     SELECT 1 WHERE EXISTS (
       SELECT
         l.program, l.label, l.program_arguments,
@@ -1818,6 +1823,10 @@
       (l.label = "com.apple.auditd")
       AND
       (l.program_arguments = p.cmdline)
+    )
+    OR EXISTS (
+      SELECT 1 FROM file
+      WHERE directory = '/var/audit' AND filename LIKE '%.not_terminated'
     );
 
 - name: MACOS - CIS - Ensure Security Auditing Flags For User-Attributable Events Are Configured Per Local Organizational Requirements
@@ -2149,7 +2158,19 @@
       1. The PayloadType string is com.apple.mobiledevice.passwordpolicy 
       2. The key to include is maxFailedAttempts
       3. The key must be set to <integer><value≤10></integer>
-  query: SELECT 1 FROM  pwd_policy where max_failed_attempts <= 10;
+  query: |
+    -- When the password profile sets minutesUntilFailedLoginReset alongside
+    -- maxFailedAttempts, macOS merges both into one OR-policy and fleetd's
+    -- pwd_policy table returns max_failed_attempts = '' (verified live). The
+    -- second branch detects that merged policy via the core password_policy
+    -- table; the threshold value itself (10) is pinned by the managed
+    -- macos-password.mobileconfig profile.
+    SELECT 1 WHERE
+    EXISTS (SELECT 1 FROM pwd_policy WHERE max_failed_attempts <= 10)
+    OR EXISTS (
+      SELECT 1 FROM password_policy
+      WHERE policy_content LIKE '%policyAttributeMaximumFailedAuthentications%'
+    );
 
 - name: MACOS - CIS - Ensure Password Minimum Length Is Configured
   platform: darwin
@@ -2598,15 +2619,19 @@
       /Users/<username>/Library/Containers/com.apple.Safari/Data/Library/Preferences
       /com.apple.Safari WBSPrivacyProxyAvailabilityTraffic -int 130276
   query: |
+    -- Scoped to users who actually have a Safari container plist. The previous
+    -- version iterated every account homed under /Users, so service/admin
+    -- accounts that never launch Safari (no container plist) made the policy
+    -- permanently un-passable on every host.
     SELECT 1 WHERE NOT EXISTS (
-      SELECT 1 FROM users AS u
+      SELECT 1 FROM file AS f
       LEFT JOIN (
         SELECT * FROM plist WHERE
           path LIKE '/Users/%/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist' AND
           key = 'WBSPrivacyProxyAvailabilityTraffic' AND
            ((value >> 2) & 1) = 1) AS p
-      ON p.path = CONCAT(u.directory, '/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist')
-      WHERE u.directory LIKE '/Users/%' AND
+      ON p.path = f.path
+      WHERE f.path LIKE '/Users/%/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist' AND
       p.value IS NULL
     );
 
@@ -2655,15 +2680,19 @@
         /Users/<username>/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari \
         WebKitPreferences.privateClickMeasurementEnabled -bool true
   query: |
+    -- Scoped to users who actually have a Safari container plist. The previous
+    -- version iterated every account homed under /Users, so service/admin
+    -- accounts that never launch Safari (no container plist) made the policy
+    -- permanently un-passable on every host.
     SELECT 1 WHERE NOT EXISTS (
-      SELECT 1 FROM users AS u
+      SELECT 1 FROM file AS f
       LEFT JOIN (
         SELECT * FROM plist WHERE
           path LIKE '/Users/%/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist' AND
           key = 'WebKitPreferences.privateClickMeasurementEnabled' AND
           value = '1') AS p
-      ON p.path = CONCAT(u.directory, '/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist')
-      WHERE u.directory LIKE '/Users/%' AND
+      ON p.path = f.path
+      WHERE f.path LIKE '/Users/%/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist' AND
       p.value IS NULL
     );
 

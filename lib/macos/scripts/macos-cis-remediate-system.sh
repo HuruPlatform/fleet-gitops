@@ -75,6 +75,38 @@ else
   /bin/rm -f "$SUDO_DROPIN.new"
 fi
 
+# --- Sudo logging --------------------------------------------------------------
+# The policy query reads /etc/sudoers itself: it passes only if no active
+# 'Defaults !log_allowed' line exists there (macOS ships one by default). A
+# sudoers.d drop-in CANNOT satisfy this check, so this is the one block that
+# edits /etc/sudoers in place -- validated with visudo before install, same
+# pattern as the drop-in above.
+LOG "enabling sudo logging (commenting out !log_allowed)"
+if /usr/bin/grep -qE '^[[:space:]]*Defaults[^#]*!log_allowed' /etc/sudoers; then
+  SUDOERS_TMP=$(/usr/bin/mktemp /private/var/tmp/sudoers.cis.XXXXXX)
+  /bin/cp /etc/sudoers "$SUDOERS_TMP"
+  /usr/bin/sed -i '' -E 's/^([[:space:]]*Defaults[^#]*!log_allowed)/#\1/' "$SUDOERS_TMP"
+  if /usr/sbin/visudo -cf "$SUDOERS_TMP" >/dev/null 2>&1; then
+    [ -f /etc/sudoers.pre-cis ] || /bin/cp /etc/sudoers /etc/sudoers.pre-cis
+    /usr/bin/install -m 0440 -o root -g wheel "$SUDOERS_TMP" /etc/sudoers
+    LOG "  commented out 'Defaults !log_allowed' (backup: /etc/sudoers.pre-cis)"
+  else
+    LOG "  visudo rejected the edit; /etc/sudoers left untouched"
+  fi
+  /bin/rm -f "$SUDOERS_TMP"
+else
+  LOG "  no active !log_allowed line; nothing to do"
+fi
+
+# --- Password mixed case -------------------------------------------------------
+# pwd_policy.min_mixed_case_characters only gets a value from a pwpolicy account
+# policy. The com.apple.mobiledevice.passwordpolicy profile payload has no mixed-
+# case key at all (verified live: the profile's other rules all show up in
+# `pwpolicy -getaccountpolicies`, mixed case never does), so this is script-only.
+LOG "requiring mixed-case passwords"
+/usr/bin/pwpolicy -n /Local/Default -setglobalpolicy "requiresMixedCase=1" 2>/dev/null \
+  || LOG "  pwpolicy -setglobalpolicy failed; check manually"
+
 # --- install.log retention ---------------------------------------------------
 # Needs a line with ttl>=365 AND no line containing "all_max=" anywhere.
 LOG "setting install.log retention to 365 days"

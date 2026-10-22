@@ -53,8 +53,12 @@ for U in ${(f)USERS}; do
   # --- Safari advertising privacy (needs Full Disk Access for fleetd) --------
   # Safari's prefs are inside a sandboxed container; without FDA the write is
   # silently refused, which is why the policy is tagged "FDA Required".
+  # Guard on the container, not the plist: a user who has launched Safari but
+  # never touched these prefs has a container with no plist, and `defaults
+  # write` creates the plist. Users with NO container are skipped -- the policy
+  # queries are scoped to existing container plists, so they pass vacuously.
   SAFARI_PLIST="$HOME_DIR/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari"
-  if [ -f "$SAFARI_PLIST.plist" ]; then
+  if [ -d "$HOME_DIR/Library/Containers/com.apple.Safari/Data/Library/Preferences" ]; then
     eval $AS_USER /usr/bin/defaults write "$SAFARI_PLIST" \
       WebKitPreferences.privateClickMeasurementEnabled -bool true
     # Hide IP address. The query tests ((value >> 2) & 1) = 1, i.e. bit 2 must be
@@ -63,7 +67,7 @@ for U in ${(f)USERS}; do
     eval $AS_USER /usr/bin/defaults write "$SAFARI_PLIST" \
       WBSPrivacyProxyAvailabilityTraffic -int 33422
   else
-    LOG "  Safari prefs not present for $U (Safari never launched); skipping"
+    LOG "  no Safari container for $U (Safari never launched); skipping"
   fi
 done
 
