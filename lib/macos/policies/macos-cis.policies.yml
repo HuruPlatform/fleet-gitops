@@ -2803,3 +2803,34 @@
           )
       ) 
     LIMIT 1;
+
+- name: MACOS - HURU - Ensure screenshots and screen recording are disabled (MDM Required)
+  platform: darwin
+  description: |
+    Verifies the allowScreenShot restriction is enforced via MDM. When set to false, users cannot
+    take screenshots (Cmd-Shift-3/4/5) or capture the screen with screen recording.
+    A host fails this policy if the restriction is missing (for example, when the Mac's MDM
+    enrollment still points at the old Fleet server and never received the updated
+    "Various restriction settings" profile) or if it is set to true.
+  resolution: |
+    The administrator should configure this via MDM profile (lib/macos/profiles/macos-misc.mobileconfig).
+      1. The PayloadType string is com.apple.applicationaccess.
+      2. The key to include is allowScreenShot.
+      3. The key must be set to <false/>.
+    If the profile is already applied in Fleet but the host still fails, re-enroll the host's MDM
+    to this Fleet server (System Settings > General > Device Management, then Turn on MDM).
+  query: |
+    SELECT 1 WHERE 
+      EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.applicationaccess' AND 
+            name='allowScreenShot' AND 
+            (value = 0 OR value = 'false') AND 
+            username = ''
+        )
+      AND NOT EXISTS (
+        SELECT 1 FROM managed_policies WHERE 
+            domain='com.apple.applicationaccess' AND 
+            name='allowScreenShot' AND 
+            (value != 0 AND value != 'false')
+        );
