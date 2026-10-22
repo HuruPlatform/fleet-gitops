@@ -18,6 +18,11 @@ controls:
   scripts:
     - path: ../lib/remove-zoom-artifacts.script.sh
     - path: ../lib/set-timezone.script.sh
+    # corp.huru.co hosts entry. Canary only on purpose - see the header of each
+    # script: this is a stopgap for the VPN pushing a dead DNS server, and the
+    # Windows one must NOT reach machines queued for domain migration.
+    - path: ../lib/macos/scripts/macos-corp-huru-hosts.sh
+    - path: ../lib/windows/scripts/windows-corp-huru-hosts.ps1
 team_settings:
   secrets:
     - secret: "$FLEET_WORKSTATIONS_CANARY_ENROLL_SECRET"
