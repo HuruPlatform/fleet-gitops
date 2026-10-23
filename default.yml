@@ -35,7 +35,15 @@ controls:
       - path: ./lib/macos/profiles/macos-secure-terminal-keyboard.mobileconfig
       - path: ./lib/macos/profiles/macos-enable-siri.mobileconfig
       - path: ./lib/macos/profiles/macos-automatic-updates.mobileconfig
-      
+
+      # CrowdStrike Falcon: the sensor needs all five approvals to come up
+      # healthy; deploy them together with the macos-falcon.sh licensing script.
+      - path: ./lib/macos/profiles/crowdstrike-system-extension.mobileconfig
+      - path: ./lib/macos/profiles/crowdstrike-full-disk-access.mobileconfig
+      - path: ./lib/macos/profiles/crowdstrike-web-filter.mobileconfig
+      - path: ./lib/macos/profiles/crowdstrike-service-management.mobileconfig
+      - path: ./lib/macos/profiles/crowdstrike-notification.mobileconfig
+
 #      - path: ./lib/macos/profiles/macos-chrome-enrollment.mobileconfig
 
 #  windows_settings:
@@ -55,6 +63,7 @@ controls:
     - path: ./lib/macos/scripts/macos-mics.sh
     - path: ./lib/macos/scripts/macos-os-update.sh
     - path: ./lib/macos/scripts/macos-corp-huru-hosts.sh
+    - path: ./lib/macos/scripts/macos-falcon.sh
 
     # CIS remediation for checks no configuration profile can satisfy, because
     # their queries read live system state or per-user preferences rather than
